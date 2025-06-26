@@ -4,12 +4,13 @@ import { Row } from '../../layout/Row';
 
 export const StyledGoalTitle = styled.h1`
   margin: 0;
-  margin-bottom: 10px;
   font-weight: 500;
 `;
 
 export const StyledGoalFooter = styled(Row)`
   width: 100%;
+  padding-top: 16px;
+  min-height: 34px;
 `;
 
 export const StyledDueDateText = styled.p`

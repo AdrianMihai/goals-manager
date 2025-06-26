@@ -4,7 +4,9 @@ export const ThemeColors = {
     main: '#333333',
   },
   grey: {
+    main: '#4E637B',
     light: '#b9aea7',
+    lightAlternative: '#ced5dd',
     veryLight: '#d7d7d7',
   },
   orange: {

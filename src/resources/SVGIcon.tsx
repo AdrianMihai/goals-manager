@@ -1,4 +1,4 @@
-import React, { isValidElement, useMemo } from "react";
+import React, { isValidElement, useMemo } from 'react';
 
 export enum IconSize {
   Small = 14,
@@ -6,14 +6,11 @@ export enum IconSize {
   Large = 20,
 }
 
-type IconProps = {
+type IconProps = React.PropsWithChildren & {
   size?: IconSize;
 };
 
-export const SVGIcon = ({
-  children,
-  size = IconSize.Medium,
-}: React.PropsWithChildren & IconProps) => {
+export const SVGIcon = ({ children, size = IconSize.Medium }: IconProps) => {
   const iconStyle = useMemo(
     () => ({
       width: `${size}px`,
@@ -30,8 +27,5 @@ export const SVGIcon = ({
     return <span>Missing Icon</span>;
   }, [children]);
 
-  return useMemo(
-    () => React.cloneElement(iconElement, { style: iconStyle }),
-    [iconElement, iconStyle]
-  );
+  return useMemo(() => React.cloneElement(iconElement, { style: iconStyle }), [iconElement, iconStyle]);
 };
