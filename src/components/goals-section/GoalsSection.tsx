@@ -1,26 +1,21 @@
-import React, { useCallback, useState } from 'react';
-import { Goal, GoalPriority } from '../../models/Goal';
-import { v6 } from 'uuid';
+import React, { useCallback } from 'react';
+import { Goal } from '../../models/Goal';
 import { GoalsListContext } from './GoalsListContext';
 import { GoalSetter } from './GoalSetter';
 import { Container } from '../layout/Container';
 import { GoalItem } from './goal-item/GoalItem';
+import { GoalsStore } from '../../stores/GoalsStore';
+import { useStore } from '../../state/UseStore';
 
 export const GoalsSection = () => {
-  const [goalsList, setGoalsList] = useState<Goal[]>([]);
+  const [{ goalsList }] = useStore(GoalsStore);
 
   const addGoal = useCallback((text: string) => {
-    setGoalsList((prevValue) => [...prevValue, { id: v6(), text, priority: GoalPriority.Low }]);
+    GoalsStore.dispatchAction(GoalsStore.events.addGoal, { text });
   }, []);
 
   const updateGoal = useCallback((goal: Goal) => {
-    setGoalsList((prevValue) => {
-      const itemIndex = prevValue.findIndex((val) => val.id === goal.id);
-
-      prevValue.splice(itemIndex, 1, goal);
-
-      return [...prevValue];
-    });
+    GoalsStore.dispatchAction(GoalsStore.events.updateGoal, { goal });
   }, []);
 
   return (
