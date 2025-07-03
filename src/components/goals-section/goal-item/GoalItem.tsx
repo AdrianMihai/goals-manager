@@ -9,6 +9,9 @@ import { Conditional } from '../../Conditional';
 import { PrioritySelect } from './PrioritySelect';
 import { GoalsListContext } from '../GoalsListContext';
 import { useTimedToggle } from '../../hooks/Common';
+import { Roadmap } from './Roadmap';
+import { Container } from '../../layout/Container';
+import { GoalItemContext } from './GoalItemContext';
 
 type GoalItemProps = {
   data: Goal;
@@ -29,26 +32,33 @@ export const GoalItem = ({ data }: GoalItemProps) => {
   );
 
   return (
-    <Card onMouseEnter={switchOn} onMouseLeave={delayedSwitchOff}>
-      <StyledGoalTitle>{data.text}</StyledGoalTitle>
-      <StyledGoalFooter mainAxisAlignment='between' crossAxisAlignment='center'>
-        <StyledDueDateText>
-          Due By:
-          <Spacer size={10} />
-          {!data.dueBy ? '— —' : data.dueBy}
-        </StyledDueDateText>
-        <Row crossAxisAlignment='center'>
-          <Conditional when={!isEditingActive}>
-            <StyledPriorityIndicator priority={data.priority} />
-            <Spacer size={5} />
-            {capitalize(data.priority)}
-            <Spacer size={10} />
-          </Conditional>
-          <Conditional when={isEditingActive}>
-            <PrioritySelect data={data} onChange={onPriorityChange} />
-          </Conditional>
-        </Row>
-      </StyledGoalFooter>
-    </Card>
+    <GoalItemContext value={{ goalData: data }}>
+      <Container onMouseEnter={switchOn} onMouseLeave={delayedSwitchOff}>
+        <Card>
+          <StyledGoalTitle>{data.text}</StyledGoalTitle>
+          <StyledGoalFooter mainAxisAlignment='between' crossAxisAlignment='center'>
+            <StyledDueDateText>
+              Due By:
+              <Spacer size={10} />
+              {!data.dueBy ? '— —' : data.dueBy}
+            </StyledDueDateText>
+            <Row crossAxisAlignment='center'>
+              <Conditional when={!isEditingActive}>
+                <StyledPriorityIndicator priority={data.priority} />
+                <Spacer size={5} />
+                {capitalize(data.priority)}
+                <Spacer size={10} />
+              </Conditional>
+              <Conditional when={isEditingActive}>
+                <PrioritySelect onChange={onPriorityChange} />
+              </Conditional>
+            </Row>
+          </StyledGoalFooter>
+        </Card>
+        <Conditional when={isEditingActive}>
+          <Roadmap />
+        </Conditional>
+      </Container>
+    </GoalItemContext>
   );
 };

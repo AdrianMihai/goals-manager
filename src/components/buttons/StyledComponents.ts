@@ -22,6 +22,10 @@ export const StyledButton = styled.button`
     opacity: 0.85;
     cursor: not-allowed;
   }
+
+  &:hover:not([disabled]) {
+    background: ${({ theme }) => theme.colors.grey.veryLight};
+  }
 `;
 
 export const PrimaryButton = styled(StyledButton)`

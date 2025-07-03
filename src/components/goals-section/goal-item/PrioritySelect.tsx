@@ -1,7 +1,7 @@
 import { createListCollection, Portal, Select } from '@ark-ui/react';
-import { Goal, GoalPriority } from '../../../models/Goal';
+import { GoalPriority } from '../../../models/Goal';
 import { mapValuesOnly } from '../../../utils/ObjectUtils';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import ArrowDropDown from '@mdi/svg/svg/menu-down.svg';
 import { StyledPriorityIndicator } from './StyledComponents';
 import { SVGIcon } from '../../../resources/SVGIcon';
@@ -10,14 +10,15 @@ import { Row } from '../../layout/Row';
 import { StyledBasicSelectContent, StyledBasicSelectInput } from '../../fields/StyledComponents';
 import { Container } from '../../layout/Container';
 import CheckedIcon from '@mdi/svg/svg/check-bold.svg';
+import { GoalItemContext } from './GoalItemContext';
 
 type SelectProps = {
-  data: Goal;
   onChange: (value: GoalPriority) => void;
 };
 
-export const PrioritySelect = ({ data, onChange }: SelectProps) => {
-  const [value, setValue] = useState(data.priority);
+export const PrioritySelect = ({ onChange }: SelectProps) => {
+  const { goalData } = useContext(GoalItemContext);
+  const [value, setValue] = useState(goalData.priority);
 
   const onValueChange = useCallback(({ value: newValue }) => {
     setValue(newValue[0]);
@@ -30,7 +31,7 @@ export const PrioritySelect = ({ data, onChange }: SelectProps) => {
         label: key,
         value: priorityValue as GoalPriority,
       })),
-    [data]
+    []
   );
 
   const selectItems = createListCollection({ items });

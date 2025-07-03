@@ -15,7 +15,7 @@ export const StyledPrimaryButton = styled(PrimaryButton)`
 export const StyledField = styled(StyledBasicTextFieldContainer)`
   & [data-part='input'] {
     width: 90%;
-    height: 32px;
+    height: 40px;
     font-size: 1.2em;
   }
 `;

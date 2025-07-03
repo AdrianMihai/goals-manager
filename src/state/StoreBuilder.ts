@@ -10,10 +10,10 @@ export interface DataObject<T> {
 }
 
 export interface Store<T> {
-  dataContainer: { value: T};
+  dataContainer: { value: T };
   dataObservable: Subject<DataObject<T>>;
   events: Record<string, string>;
-  dispatchAction: (eventName: string, args: any) => void
+  dispatchAction: (eventName: string, args: any) => void;
 }
 
 export const createStore = <T extends Record<string, any>>(

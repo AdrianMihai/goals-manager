@@ -11,6 +11,7 @@ export const StyledBasicTextFieldContainer = styled(Field.Root)`
   }
 
   & [data-part='input'] {
+    box-sizing: border-box;
     padding: 4px;
     border-radius: ${({ theme }) => theme.field.borderRadius};
     border: ${({ theme }) => theme.field.defaultBorder};
@@ -24,6 +25,27 @@ export const StyledBasicTextFieldContainer = styled(Field.Root)`
   & [data-part='helper-text'] {
     display: block;
     width: 100%;
+  }
+`;
+
+export const StyledDecoratedTextInputWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  border-radius: 4px;
+  border: ${({ theme }) => theme.field.defaultBorder};
+
+  &:focus-within {
+    border: ${({ theme }) => theme.field.hoverBorder};
+  }
+
+  & [data-part='input'] {
+    border: none;
+    flex-grow: 1;
+    flex-basis: 2;
+
+    &:focus {
+      border: none;
+    }
   }
 `;
 

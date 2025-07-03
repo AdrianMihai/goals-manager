@@ -1,5 +1,6 @@
 export const ThemeColors = {
   primary: '#f5ae33',
+  secondary: '#AEBDCF',
   black: {
     main: '#333333',
   },
@@ -12,5 +13,11 @@ export const ThemeColors = {
   orange: {
     main: '#f58433',
     veryLight: '#f7cbaf',
+  },
+  green: {
+    light: '#AECECF',
+  },
+  blue: {
+    light: '#d6f6ff',
   },
 };

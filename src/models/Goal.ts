@@ -10,3 +10,10 @@ export interface Goal {
   priority: GoalPriority;
   dueBy?: string;
 }
+
+export interface SubGoal {
+  id: string;
+  goalId: string;
+  text: string;
+  isCompleted: boolean;
+}
