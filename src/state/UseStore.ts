@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Store } from './StoreBuilder';
+import { ComparerFn, Store } from './StoreBuilder';
 
-export const useStore = <T>(storeInstance: Store<T>) => {
+export const useStore = <T>(storeInstance: Store<T>, comparer?: ComparerFn<T>) => {
   const [value, setValue] = useState(storeInstance.dataContainer.value);
 
   useEffect(() => {
-    const dataChangeObsever = storeInstance.dataObservable.subscribe(({ current }) => {
+    const dataChangeObsever = storeInstance.subscribe(({ current }) => {
       setValue(current);
-    });
+    }, comparer);
 
     return () => dataChangeObsever.unsubscribe();
-  }, [storeInstance]);
+  }, [storeInstance, comparer]);
 
   return [value];
 };

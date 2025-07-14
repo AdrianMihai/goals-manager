@@ -5,7 +5,8 @@ import { Container } from '../../layout/Container';
 import { Button } from '../../buttons/Button';
 import { StyledBasicTextFieldContainer } from '../../fields/StyledComponents';
 import { Card } from '../../surfaces/Card';
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
+import { SVGIcon } from '../../../resources/SVGIcon';
 
 export const StyledGoalTitle = styled.h1`
   margin: 0;
@@ -45,6 +46,10 @@ export const StyledPriorityIndicator = styled.div<PriorityIndicatorProps>`
   }};
 `;
 
+export const StyledRoadmapWrapper = styled(Container)`
+  position: relative;
+`;
+
 const ItemsLinkIndent = '3%';
 
 export const StyledRoadmapItemLink = styled(Container)`
@@ -68,7 +73,7 @@ export const StyledSubGoalCreatorContainer = styled(Container)`
 export const StyledAddSubGoalButton = styled(Button)`
   border: none;
   width: max-content;
-  padding: 4px;
+  padding: 8px 4px;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.grey.veryLight};
@@ -96,5 +101,60 @@ export const StyledSubGoalTitle = styled.h3`
 
 export const StyledSubGoalConfirmButton = styled(Button)`
   border: none;
-  padding: 4px;
+  padding: 4px 8px;
+`;
+
+export const StyledAnalysisButton = styled(Button)`
+  background-color: ${({ theme }) => theme.colors.secondary.main};
+  color: whitesmoke;
+  width: max-content;
+  padding: 8px 4px;
+  border: none;
+
+  & path {
+    fill: whitesmoke;
+  }
+
+  &:hover:not([disabled]) {
+    background-color: ${({ theme }) => theme.colors.secondary.dark};
+  }
+`;
+
+export const StyledAnalysisPreviewButton = styled(Button)`
+  color: ${({ theme }) => theme.colors.primary};
+  width: max-content;
+  border: none;
+`;
+
+export const StyledAnalysisCloseButton = styled(Button)`
+  border: none;
+`;
+
+export const StyledAnalysisTitle = styled.h2`
+  margin: 0;
+`;
+
+const analysisLoadingAnimation = keyframes`
+  25% {
+    transform: rotate(90deg);
+  }
+
+  50% {
+    transform: rotate(180deg);
+  }
+
+  75% {
+    transform: rotate(270deg);
+  }
+  
+  100% {
+    transform: rotate(360deg);
+  }
+`;
+
+export const StyledAnalysisLoadingSpinner = styled(SVGIcon)`
+  animation: ${analysisLoadingAnimation} linear 1s infinite;
+  & > path {
+    fill: white;
+  }
 `;

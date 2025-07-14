@@ -1,6 +1,9 @@
 export const ThemeColors = {
   primary: '#f5ae33',
-  secondary: '#AEBDCF',
+  secondary: {
+    main: '#AEBDCF',
+    dark: '#24384F',
+  },
   black: {
     main: '#333333',
   },

@@ -7,7 +7,7 @@ export const StyledPrimaryButton = styled(PrimaryButton)`
   flex-grow: 1;
   justify-content: center;
 
-  &:hover:not(disabled) {
+  &:hover:not([disabled]) {
     background: ${({ theme }) => theme.colors.orange.main};
   }
 `;

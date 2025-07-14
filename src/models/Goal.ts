@@ -17,3 +17,8 @@ export interface SubGoal {
   text: string;
   isCompleted: boolean;
 }
+
+export interface RoadmapData {
+  goal: Goal;
+  subGoals: SubGoal[];
+}

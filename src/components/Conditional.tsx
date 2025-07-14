@@ -4,4 +4,4 @@ type ConditionalProps = React.PropsWithChildren & {
   when: boolean;
 };
 
-export const Conditional = ({ when, children }: ConditionalProps) => (when === true ? children : null);
+export const Conditional = ({ when, children }: ConditionalProps) => (!!when === true ? children : null);

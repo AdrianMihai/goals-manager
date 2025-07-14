@@ -1,7 +1,7 @@
 import { Goal } from '../../../models/Goal';
 import { Row } from '../../layout/Row';
 import { Card } from '../../surfaces/Card';
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useRef, useState } from 'react';
 import { StyledDueDateText, StyledGoalFooter, StyledGoalTitle, StyledPriorityIndicator } from './StyledComponents';
 import { Spacer } from '../../layout/Spacer';
 import { capitalize } from '../../../utils/StringUtils';
@@ -31,9 +31,25 @@ export const GoalItem = ({ data }: GoalItemProps) => {
     [updateGoal, data]
   );
 
+  const isEditingModeFrozen = useRef(false);
+
+  const freezeEditMode = useCallback(() => {
+    isEditingModeFrozen.current = true;
+  }, []);
+
+  const unFreezeEditMode = useCallback(() => {
+    isEditingModeFrozen.current = false;
+  }, []);
+
+  const closeEditingMode = useCallback(() => {
+    if (isEditingModeFrozen.current) return;
+
+    delayedSwitchOff();
+  }, [delayedSwitchOff]);
+
   return (
-    <GoalItemContext value={{ goalData: data }}>
-      <Container onMouseEnter={switchOn} onMouseLeave={delayedSwitchOff}>
+    <GoalItemContext value={{ goalData: data, freezeEditMode, unFreezeEditMode }}>
+      <Container onMouseEnter={switchOn} onMouseLeave={closeEditingMode}>
         <Card>
           <StyledGoalTitle>{data.text}</StyledGoalTitle>
           <StyledGoalFooter mainAxisAlignment='between' crossAxisAlignment='center'>

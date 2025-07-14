@@ -8,7 +8,7 @@ export const StyledButton = styled.button`
   background: transparent;
   border-radius: 4px;
   border: none;
-  padding: 10px 5px;
+  padding: 8px 6px;
   color: ${({ theme }) => theme.colors.black.main};
   border: 1px solid ${({ theme }) => theme.colors.grey.light};
 

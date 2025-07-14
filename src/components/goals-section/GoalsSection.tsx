@@ -1,14 +1,18 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Goal } from '../../models/Goal';
 import { GoalsListContext } from './GoalsListContext';
 import { GoalSetter } from './GoalSetter';
 import { Container } from '../layout/Container';
 import { GoalItem } from './goal-item/GoalItem';
-import { GoalsStore } from '../../stores/GoalsStore';
+import { GoalsStore, SubGoalsStore } from '../../stores/GoalsStore';
 import { useStore } from '../../state/UseStore';
+import { AppEvents, AppMediator } from '../../events/AppMediator';
+import { analyzeRoadmap } from '../../api/GeminiApi';
+
+const goalsComparer = (prev, next) => prev.goalsList !== next.goalsList;
 
 export const GoalsSection = () => {
-  const [{ goalsList }] = useStore(GoalsStore);
+  const [{ goalsList }] = useStore(GoalsStore, goalsComparer);
 
   const addGoal = useCallback((text: string) => {
     GoalsStore.dispatchAction(GoalsStore.events.addGoal, { text });
@@ -16,6 +20,17 @@ export const GoalsSection = () => {
 
   const updateGoal = useCallback((goal: Goal) => {
     GoalsStore.dispatchAction(GoalsStore.events.updateGoal, { goal });
+  }, []);
+
+  useEffect(() => {
+    const analysisTriggerObserver = AppMediator.subscribe(AppEvents.analyzeRoadmap, ({ goalId }) => {
+      analyzeRoadmap({
+        goal: GoalsStore.dataContainer.value.goalsList.find((val) => val.id === goalId),
+        subGoals: SubGoalsStore.dataContainer.value.subGoals[goalId],
+      });
+    });
+
+    return () => analysisTriggerObserver.unsubscribe();
   }, []);
 
   return (

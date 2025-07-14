@@ -2,12 +2,20 @@ import { v6 } from 'uuid';
 import { Goal, GoalPriority, SubGoal } from '../models/Goal';
 import { createStore } from '../state/StoreBuilder';
 
-type GoalsCollection = {
+type GoalRoadmap = {
+  isAnalysisInProgress: boolean;
+  analysisContent: string;
+};
+
+export const EmptyRoadmap = { isAnalysisInProgress: false, analysisContent: '' };
+
+export type GoalsCollection = {
   goalsList: Goal[];
+  roadmapAnalysis: Record<string, GoalRoadmap>;
 };
 
 export const GoalsStore = createStore<GoalsCollection>(
-  { goalsList: [] },
+  { goalsList: [], roadmapAnalysis: {} },
   {
     addGoal: (draft, { text }) => {
       draft.goalsList.push({ id: v6(), text, priority: GoalPriority.Low });
@@ -16,6 +24,27 @@ export const GoalsStore = createStore<GoalsCollection>(
       const itemIndex = draft.goalsList.findIndex((val) => val.id === goal.id);
 
       draft.goalsList.splice(itemIndex, 1, goal);
+    },
+    startRoadmapAnalysis: (draft, { goalId }) => {
+      if (!draft.roadmapAnalysis[goalId]) {
+        draft.roadmapAnalysis[goalId] = EmptyRoadmap;
+      }
+
+      draft.roadmapAnalysis[goalId] = {
+        ...draft.roadmapAnalysis[goalId],
+        isAnalysisInProgress: true,
+      };
+    },
+    analysisReceived: (draft, { goalId, analysis }) => {
+      if (!draft.roadmapAnalysis[goalId]) {
+        draft.roadmapAnalysis[goalId] = EmptyRoadmap;
+      }
+
+      draft.roadmapAnalysis[goalId] = {
+        ...draft.roadmapAnalysis[goalId],
+        isAnalysisInProgress: false,
+        analysisContent: analysis,
+      };
     },
   }
 );
