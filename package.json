@@ -2,7 +2,8 @@
   "name": "goals-manager",
   "version": "1.0.0",
   "scripts": {
-    "start": "npx rspack serve"
+    "start": "npx rspack serve",
+    "build": "npx rspack build"
   },
   "keywords": [],
   "author": "",

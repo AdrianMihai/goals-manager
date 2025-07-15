@@ -1,7 +1,7 @@
 import { Goal } from '../../../models/Goal';
 import { Row } from '../../layout/Row';
 import { Card } from '../../surfaces/Card';
-import React, { useCallback, useContext, useRef, useState } from 'react';
+import React, { useCallback, useContext, useRef } from 'react';
 import { StyledDueDateText, StyledGoalFooter, StyledGoalTitle, StyledPriorityIndicator } from './StyledComponents';
 import { Spacer } from '../../layout/Spacer';
 import { capitalize } from '../../../utils/StringUtils';
@@ -12,6 +12,8 @@ import { useTimedToggle } from '../../hooks/Common';
 import { Roadmap } from './Roadmap';
 import { Container } from '../../layout/Container';
 import { GoalItemContext } from './GoalItemContext';
+import { DatePicker } from '../../fields/date/DatePicker';
+import { parseDate } from '@ark-ui/react';
 
 type GoalItemProps = {
   data: Goal;
@@ -26,6 +28,16 @@ export const GoalItem = ({ data }: GoalItemProps) => {
       updateGoal({
         ...data,
         priority: newPriority,
+      });
+    },
+    [updateGoal, data]
+  );
+
+  const onDateChange = useCallback(
+    (ev) => {
+      updateGoal({
+        ...data,
+        dueBy: new Date(ev.valueAsString[0]).toISOString(),
       });
     },
     [updateGoal, data]
@@ -53,11 +65,16 @@ export const GoalItem = ({ data }: GoalItemProps) => {
         <Card>
           <StyledGoalTitle>{data.text}</StyledGoalTitle>
           <StyledGoalFooter mainAxisAlignment='between' crossAxisAlignment='center'>
-            <StyledDueDateText>
-              Due By:
-              <Spacer size={10} />
-              {!data.dueBy ? '— —' : data.dueBy}
-            </StyledDueDateText>
+            <Conditional when={!isEditingActive}>
+              <Row>
+                <StyledDueDateText>Due By:</StyledDueDateText>
+                <Spacer size={10} />
+                <StyledDueDateText>{!data.dueBy ? '— —' : new Date(data.dueBy).toLocaleDateString()}</StyledDueDateText>
+              </Row>
+            </Conditional>
+            <Conditional when={isEditingActive}>
+              <DatePicker value={data.dueBy && [parseDate(new Date(data.dueBy))]} onValueChange={onDateChange} />
+            </Conditional>
             <Row crossAxisAlignment='center'>
               <Conditional when={!isEditingActive}>
                 <StyledPriorityIndicator priority={data.priority} />

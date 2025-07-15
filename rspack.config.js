@@ -1,10 +1,34 @@
 const { rspack } = require('@rspack/core');
 const { TsCheckerRspackPlugin } = require('ts-checker-rspack-plugin');
-const path = require('path')
+const path = require('path');
+const { cp } = require('fs');
+
+const IS_DEV = process.env.NODE_ENV === 'development';
+
+const computePlugins = () => {
+  const plugins = [
+    new rspack.HtmlRspackPlugin({
+      template: 'public/index.html',
+      chunks: ['main'],
+    }),
+  ];
+
+  if (IS_DEV) {
+    plugins.push(
+      new TsCheckerRspackPlugin(),
+      new rspack.HotModuleReplacementPlugin({
+        include: [/\.jsx$/, /\.tsx$/],
+        exclude: [/node_modules/],
+      })
+    );
+  }
+
+  return plugins;
+};
 
 module.exports = {
   entry: {
-    main: './src/main.tsx'
+    main: './src/main.tsx',
   },
   module: {
     rules: [
@@ -17,7 +41,7 @@ module.exports = {
             parser: {
               syntax: 'typescript',
               jsx: true,
-              tsx: true
+              tsx: true,
             },
           },
         },
@@ -27,14 +51,11 @@ module.exports = {
         test: /\.svg$/i,
         issuer: /\.[jt]sx?$/,
         use: ['@svgr/webpack'],
-        options: { typescript: true }
+        options: { typescript: true },
       },
     ],
   },
-  plugins: [new TsCheckerRspackPlugin(), new rspack.HtmlRspackPlugin({
-    template: 'public/index.html',
-    chunks: ['main']
-  })],
+  plugins: computePlugins(),
   resolve: {
     // Add `.ts` and `.tsx` as a resolvable extension.
     extensions: ['.ts', '.tsx', '.js'],
@@ -50,5 +71,5 @@ module.exports = {
     compress: true,
     port: 9000,
     static: path.join(__dirname, 'public'),
-  }
-}
+  },
+};

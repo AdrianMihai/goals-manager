@@ -19,7 +19,7 @@ export const StyledGoalFooter = styled(Row)`
   min-height: 34px;
 `;
 
-export const StyledDueDateText = styled.p`
+export const StyledDueDateText = styled.span`
   margin: 0;
   color: gray;
   font-weight: bold;
