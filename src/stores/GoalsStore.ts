@@ -46,6 +46,9 @@ export const GoalsStore = createStore<GoalsCollection>(
         analysisContent: analysis,
       };
     },
+    setGoals: (draft, allGoals) => {
+      draft.goalsList = allGoals;
+    },
   }
 );
 
@@ -67,6 +70,9 @@ export const SubGoalsStore = createStore<SubGoalsCollection>(
         text,
         isCompleted: false,
       });
+    },
+    setSubGoals: (draft, { goalId, allSubGoals }) => {
+      draft.subGoals[goalId] = allSubGoals;
     },
   }
 );

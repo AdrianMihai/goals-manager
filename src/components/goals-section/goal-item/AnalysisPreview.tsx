@@ -9,6 +9,7 @@ import { useTimedToggle } from '../../hooks/Common';
 import { Dialog } from '../../surfaces/dialog/Dialog';
 import { StyledDialogFooter } from '../../surfaces/dialog/StyledComponents';
 import { DialogBody } from '../../surfaces/dialog/DialogBody';
+import { isNullOrUndefined } from '../../../utils/ObjectUtils';
 
 export const AnalysisPreview = ({ analysisData }) => {
   const { goalData, freezeEditMode, unFreezeEditMode } = useContext(GoalItemContext);
@@ -18,8 +19,6 @@ export const AnalysisPreview = ({ analysisData }) => {
 
   const onOpenChange = useCallback(
     (e) => {
-      console.log(e);
-
       e.open ? open() : close();
     },
     [open, close]
@@ -35,7 +34,7 @@ export const AnalysisPreview = ({ analysisData }) => {
 
   return (
     <>
-      <Conditional when={analysisData.analysisContent}>
+      <Conditional when={!isNullOrUndefined(analysisData.analysisContent)}>
         <StyledAnalysisPreviewButton onClick={open}>View Analysis</StyledAnalysisPreviewButton>
       </Conditional>
       <Dialog open={isOpen} onOpenChange={onOpenChange}>
