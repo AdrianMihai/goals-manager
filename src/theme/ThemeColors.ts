@@ -13,12 +13,19 @@ export const ThemeColors = {
     lightAlternative: '#ced5dd',
     veryLight: '#d7d7d7',
   },
+  red: {
+    main: '#FA5146',
+    dark: '#BA6863',
+    light: '#F5A89F',
+  },
   orange: {
     main: '#f58433',
     veryLight: '#f7cbaf',
   },
   green: {
-    light: '#AECECF',
+    main: '#37cc7a',
+    dark: '#478A60',
+    light: '#baf7bd',
   },
   blue: {
     light: '#d6f6ff',

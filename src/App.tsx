@@ -4,6 +4,7 @@ import { ThemeValues } from './theme/ThemeValues';
 import { Container } from './components/layout/Container';
 import { GoalsSection } from './components/goals-section/GoalsSection';
 import './types.d.ts';
+import { NotificationMessages } from './components/common-features/NotificationMessages';
 
 export const App = () => {
   return (
@@ -11,6 +12,7 @@ export const App = () => {
       <Container ratio={60} verticalSpacing={32}>
         <GoalsSection />
       </Container>
+      <NotificationMessages />
     </ThemeProvider>
   );
 };

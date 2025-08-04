@@ -6,14 +6,32 @@ import TrackChangesOutlinedIcon from '@mdi/svg/svg/radar.svg';
 import { Spacer } from '../layout/Spacer';
 import { StyledField, StyledPrimaryButton } from './StyledComponents';
 import { GoalsListContext } from './GoalsListContext';
+import { toaster } from '../common-features/NotificationMessages';
+import { isEmptyString } from '../../utils/StringUtils';
+import { AppEvents, AppMediator } from '../../events/AppMediator';
 
 export const GoalSetter = () => {
   const [goalText, setGoalText] = useState('');
   const { addGoal } = useContext(GoalsListContext);
 
   const onGoalAdd = useCallback(() => {
+    if (isEmptyString(goalText)) {
+      AppMediator.publish(AppEvents.showNotificationMessage, {
+        title: 'Cannot add empty goal',
+        type: 'error',
+        duration: 4000,
+      });
+
+      return;
+    }
+
     addGoal(goalText);
     setGoalText('');
+    AppMediator.publish(AppEvents.showNotificationMessage, {
+      title: 'Goal successfully added',
+      type: 'success',
+      duration: 5000,
+    });
   }, [addGoal, goalText]);
 
   return (
