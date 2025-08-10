@@ -9,13 +9,12 @@ import {
 import { Spacer } from '../../layout/Spacer';
 import { IconSize, SVGIcon } from '../../../resources/SVGIcon';
 import { Conditional } from '../../Conditional';
-import { EmptyRoadmap, GoalsCollection, GoalsStore, SubGoalsStore } from '../../../stores/GoalsStore';
+import { SubGoalsStore } from '../../../stores/GoalsStore';
 import { GoalItemContext } from './GoalItemContext';
 import { Col } from '../../layout/Col';
 import { Row } from '../../layout/Row';
 import { SubGoalCreator } from './SubGoalCreator';
 import ChartIcon from '@mdi/svg/svg/chart-scatter-plot.svg';
-import { useStore } from '../../../state/UseStore';
 import { AppEvents, AppMediator } from '../../../events/AppMediator';
 import { AnalysisPreview } from './AnalysisPreview';
 

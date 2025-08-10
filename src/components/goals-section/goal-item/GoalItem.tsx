@@ -2,7 +2,13 @@ import { Goal } from '../../../models/Goal';
 import { Row } from '../../layout/Row';
 import { Card } from '../../surfaces/Card';
 import React, { useCallback, useContext, useRef } from 'react';
-import { StyledDueDateText, StyledGoalFooter, StyledGoalTitle, StyledPriorityIndicator } from './StyledComponents';
+import {
+  StyledDueDateText,
+  StyledGoalFooter,
+  StyledGoalHeader,
+  StyledGoalTitle,
+  StyledPriorityIndicator,
+} from './StyledComponents';
 import { Spacer } from '../../layout/Spacer';
 import { capitalize } from '../../../utils/StringUtils';
 import { Conditional } from '../../Conditional';
@@ -14,13 +20,14 @@ import { Container } from '../../layout/Container';
 import { GoalItemContext } from './GoalItemContext';
 import { DatePicker } from '../../fields/date/DatePicker';
 import { parseDate } from '@ark-ui/react';
+import { ItemContextMenu } from './ItemContextMenu';
 
 type GoalItemProps = {
   data: Goal;
 };
 
 export const GoalItem = ({ data }: GoalItemProps) => {
-  const { isOn: isEditingActive, switchOn, delayedSwitchOff } = useTimedToggle(false);
+  const { isOn: isEditingActive, switchOn, delayedSwitchOff, switchOff } = useTimedToggle(false);
   const { updateGoal } = useContext(GoalsListContext);
 
   const onPriorityChange = useCallback(
@@ -60,10 +67,22 @@ export const GoalItem = ({ data }: GoalItemProps) => {
   }, [delayedSwitchOff]);
 
   return (
-    <GoalItemContext value={{ goalData: data, freezeEditMode, unFreezeEditMode }}>
-      <Container onMouseEnter={switchOn} onMouseLeave={closeEditingMode}>
+    <GoalItemContext
+      value={{
+        goalData: data,
+        isEditingActive,
+        freezeEditMode,
+        unFreezeEditMode,
+        enableEditMode: switchOn,
+        disableEditMode: switchOff,
+      }}
+    >
+      <Container data-item-identifier={`goal-item-${data.id}`} onMouseLeave={closeEditingMode}>
         <Card>
-          <StyledGoalTitle>{data.text}</StyledGoalTitle>
+          <StyledGoalHeader mainAxisAlignment='between'>
+            <StyledGoalTitle>{data.text}</StyledGoalTitle>
+            <ItemContextMenu />
+          </StyledGoalHeader>
           <StyledGoalFooter mainAxisAlignment='between' crossAxisAlignment='center'>
             <Conditional when={!isEditingActive}>
               <Row>

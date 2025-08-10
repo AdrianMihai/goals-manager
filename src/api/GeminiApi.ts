@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { RoadmapData } from '../models/Goal';
+import { RoadmapData } from './Types';
 import { GoalsStore } from '../stores/GoalsStore';
 
 const getRoadmapPrompt = (data: RoadmapData) => {

@@ -20,3 +20,9 @@ export const StyledLoadingBackdrop = styled.div`
   right: 0;
   background: rgba(0, 0, 0, 0.3);
 `;
+
+export const StyledContextMenuContent = styled(Container)`
+  border-radius: 4px;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 5px 1px ${({ theme }) => theme.colors.grey.light};
+`;

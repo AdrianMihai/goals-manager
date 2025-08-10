@@ -9,12 +9,13 @@ import {
   StyledSubGoalTitle,
 } from './StyledComponents';
 import { useStore } from '../../../state/UseStore';
-import { EmptyRoadmap, GoalsCollection, GoalsStore, SubGoalsStore } from '../../../stores/GoalsStore';
+import { GoalsCollection, GoalsStore, SubGoalsStore } from '../../../stores/GoalsStore';
 import { GoalItemContext } from './GoalItemContext';
 import { LoadingBackdrop } from '../../surfaces/LoadingBackdrop';
 import Loading from '@mdi/svg/svg/loading.svg';
 import { IconSize } from '../../../resources/SVGIcon';
 import { Conditional } from '../../Conditional';
+import { EmptyRoadmap } from '../../../models/Goal';
 
 const comparer = (prev, next) => prev.subGoals !== next.subGoals;
 

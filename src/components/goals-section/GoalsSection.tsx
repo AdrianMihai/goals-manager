@@ -8,14 +8,24 @@ import { GoalsStore, SubGoalsStore } from '../../stores/GoalsStore';
 import { useStore } from '../../state/UseStore';
 import { AppEvents, AppMediator } from '../../events/AppMediator';
 import { analyzeRoadmap } from '../../api/GeminiApi';
+import { useScrollPositioning } from './UseScrollPositioning';
+import { addNewGoal } from '../../api/Goals';
 
 const goalsComparer = (prev, next) => prev.goalsList !== next.goalsList;
 
 export const GoalsSection = () => {
   const [{ goalsList }] = useStore(GoalsStore, goalsComparer);
 
+  const { setItemToScroll } = useScrollPositioning(goalsList);
+
+  useEffect(() => {
+    const insertSubscription = AppMediator.subscribe(AppEvents.goalInserted, (newGoal) => setItemToScroll(newGoal.id));
+
+    return () => insertSubscription.unsubscribe();
+  }, [setItemToScroll]);
+
   const addGoal = useCallback((text: string) => {
-    GoalsStore.dispatchAction(GoalsStore.events.addGoal, { text });
+    addNewGoal({ text });
   }, []);
 
   const updateGoal = useCallback((goal: Goal) => {
@@ -40,7 +50,7 @@ export const GoalsSection = () => {
         {goalsList.map((goal) => (
           <>
             <GoalItem key={`goal-${goal.id}`} data={goal} />
-            <Container verticalSpacing={6} />
+            <Container key={`goal-spacer-${goal.id}`} verticalSpacing={6} />
           </>
         ))}
       </Container>

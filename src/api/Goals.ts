@@ -1,6 +1,9 @@
 import axios from 'axios';
-import { Goal } from '../models/Goal';
+import { Goal, GoalPriority } from '../models/Goal';
 import { GoalsStore } from '../stores/GoalsStore';
+import { GoalCreationData } from './Types';
+import { v6 } from 'uuid';
+import { AppEvents, AppMediator } from '../events/AppMediator';
 
 const BASE_URL = 'localhost:3000/goals';
 
@@ -21,4 +24,11 @@ export const fetchAllGoals = async () => {
       result.map((val) => ({ ...val, subGoals: undefined, roadmapAnalysis: undefined }))
     );
   });
+};
+
+export const addNewGoal = ({ text }: GoalCreationData) => {
+  const newGoal = { id: v6(), text, priority: GoalPriority.Low };
+
+  GoalsStore.dispatchAction(GoalsStore.events.addGoal, newGoal);
+  AppMediator.publish(AppEvents.goalInserted, newGoal);
 };

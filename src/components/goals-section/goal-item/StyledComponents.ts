@@ -158,3 +158,11 @@ export const StyledAnalysisLoadingSpinner = styled(SVGIcon)`
     fill: white;
   }
 `;
+
+export const StyledGoalHeader = styled(Row)`
+  width: 100%;
+`;
+
+export const StyledGoalItemButton = styled(Button)`
+  border: none;
+`;

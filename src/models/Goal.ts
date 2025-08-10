@@ -18,7 +18,9 @@ export interface SubGoal {
   isCompleted: boolean;
 }
 
-export interface RoadmapData {
-  goal: Goal;
-  subGoals: SubGoal[];
-}
+export type GoalRoadmap = {
+  isAnalysisInProgress: boolean;
+  analysisContent: string;
+};
+
+export const EmptyRoadmap = { isAnalysisInProgress: false, analysisContent: '' };
