@@ -1,5 +1,5 @@
 import { v6 } from 'uuid';
-import { EmptyRoadmap, Goal, GoalRoadmap, SubGoal } from '../models/Goal';
+import { EmptyRoadmap, Goal, GoalPriority, GoalRoadmap, SubGoal } from '../models/Goal';
 import { createStore } from '../state/StoreBuilder';
 
 export type GoalsCollection = {
@@ -10,18 +10,26 @@ export type GoalsCollection = {
 export const GoalsStore = createStore<GoalsCollection>(
   { goalsList: [], roadmapAnalysis: {} },
   {
-    addGoal: (draft, newGoal) => {
+    addGoal: ({ draft, queryBus, events }, { text }) => {
+      const newGoal = { id: v6(), text, priority: GoalPriority.Low };
+
       draft.goalsList.push(newGoal);
+      queryBus.publishResult(events.newGoalInserted, { newGoal });
     },
-    updateGoal: (draft, { goal: goal }) => {
+    updateGoal: ({ draft }, { goal: goal }) => {
       const itemIndex = draft.goalsList.findIndex((val) => val.id === goal.id);
 
       draft.goalsList.splice(itemIndex, 1, goal);
     },
-    deleteGoal: (draft, { goalId }) => {
-      draft.goalsList = draft.goalsList.filter((item) => item.id !== goalId);
+    deleteGoal: ({ draft, queryBus, events }, { goalId }) => {
+      const deletedGoal = draft.goalsList.find((item) => item.id === goalId);
+
+      if (!deletedGoal) return;
+
+      draft.goalsList = draft.goalsList.filter((item) => item.id !== deletedGoal.id);
+      queryBus.publishResult(events.goalDeleted, { deletedGoal });
     },
-    startRoadmapAnalysis: (draft, { goalId }) => {
+    startRoadmapAnalysis: ({ draft }, { goalId }) => {
       if (!draft.roadmapAnalysis[goalId]) {
         draft.roadmapAnalysis[goalId] = EmptyRoadmap;
       }
@@ -31,7 +39,7 @@ export const GoalsStore = createStore<GoalsCollection>(
         isAnalysisInProgress: true,
       };
     },
-    analysisReceived: (draft, { goalId, analysis }) => {
+    analysisReceived: ({ draft }, { goalId, analysis }) => {
       if (!draft.roadmapAnalysis[goalId]) {
         draft.roadmapAnalysis[goalId] = EmptyRoadmap;
       }
@@ -42,9 +50,14 @@ export const GoalsStore = createStore<GoalsCollection>(
         analysisContent: analysis,
       };
     },
-    setGoals: (draft, allGoals) => {
+    setGoals: ({ draft }, allGoals) => {
       draft.goalsList = allGoals;
     },
+  },
+  {
+    newGoalInserted: (_, { newGoal }) => newGoal,
+    goalDeleted: (_, { deletedGoal }) => deletedGoal,
+    getByPriority: (data, { priority }) => data.goalsList.filter((val) => val.priority === priority),
   }
 );
 
@@ -55,7 +68,7 @@ type SubGoalsCollection = {
 export const SubGoalsStore = createStore<SubGoalsCollection>(
   { subGoals: {} },
   {
-    addSubGoal: (draft, { goalId, text }) => {
+    addSubGoal: ({ draft }, { goalId, text }) => {
       if (!draft.subGoals[goalId]) {
         draft.subGoals[goalId] = [];
       }
@@ -67,7 +80,7 @@ export const SubGoalsStore = createStore<SubGoalsCollection>(
         isCompleted: false,
       });
     },
-    setSubGoals: (draft, { goalId, allSubGoals }) => {
+    setSubGoals: ({ draft }, { goalId, allSubGoals }) => {
       draft.subGoals[goalId] = allSubGoals;
     },
   }

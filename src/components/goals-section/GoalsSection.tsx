@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { Goal } from '../../models/Goal';
+import { Goal, GoalPriority } from '../../models/Goal';
 import { GoalsListContext } from './GoalsListContext';
 import { GoalSetter } from './GoalSetter';
 import { Container } from '../layout/Container';
@@ -9,7 +9,6 @@ import { useStore } from '../../state/UseStore';
 import { AppEvents, AppMediator } from '../../events/AppMediator';
 import { analyzeRoadmap } from '../../api/GeminiApi';
 import { useScrollPositioning } from './UseScrollPositioning';
-import { addNewGoal } from '../../api/Goals';
 
 const goalsComparer = (prev, next) => prev.goalsList !== next.goalsList;
 
@@ -19,13 +18,15 @@ export const GoalsSection = () => {
   const { setItemToScroll } = useScrollPositioning(goalsList);
 
   useEffect(() => {
-    const insertSubscription = AppMediator.subscribe(AppEvents.goalInserted, (newGoal) => setItemToScroll(newGoal.id));
+    const insertSubscription = GoalsStore.onPublishedResult(GoalsStore.events.newGoalInserted, (newGoal) => {
+      setItemToScroll(newGoal.id);
+    });
 
     return () => insertSubscription.unsubscribe();
   }, [setItemToScroll]);
 
   const addGoal = useCallback((text: string) => {
-    addNewGoal({ text });
+    GoalsStore.dispatchAction(GoalsStore.events.addGoal, { text });
   }, []);
 
   const updateGoal = useCallback((goal: Goal) => {

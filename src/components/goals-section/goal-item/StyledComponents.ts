@@ -165,4 +165,5 @@ export const StyledGoalHeader = styled(Row)`
 
 export const StyledGoalItemButton = styled(Button)`
   border: none;
+  width: 100%;
 `;

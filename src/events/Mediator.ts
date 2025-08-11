@@ -29,4 +29,13 @@ export class Mediator {
       args,
     });
   };
+
+  asyncPublish = (eventName, args) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        this.publish(eventName, args);
+        resolve(null);
+      }, 0);
+    });
+  };
 }

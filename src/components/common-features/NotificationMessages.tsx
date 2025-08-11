@@ -26,7 +26,7 @@ export const NotificationMessages = () => {
   return (
     <Toaster toaster={toaster}>
       {(toast) => (
-        <StyledMessageContainer id={toast.id} key={toast.id}>
+        <StyledMessageContainer key={`notification-message-${toast.id}`} id={toast.id}>
           <Container verticalSpacing={10} horizontalSpacing={5}>
             <Row crossAxisAlignment='center'>
               <Toast.Title>{toast.title}</Toast.Title>

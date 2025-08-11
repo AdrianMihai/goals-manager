@@ -26,9 +26,4 @@ export const fetchAllGoals = async () => {
   });
 };
 
-export const addNewGoal = ({ text }: GoalCreationData) => {
-  const newGoal = { id: v6(), text, priority: GoalPriority.Low };
-
-  GoalsStore.dispatchAction(GoalsStore.events.addGoal, newGoal);
-  AppMediator.publish(AppEvents.goalInserted, newGoal);
-};
+export const addNewGoal = ({ text }: GoalCreationData) => {};
