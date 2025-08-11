@@ -1,14 +1,13 @@
 import { Field } from '@ark-ui/react';
-import { Row } from '../layout/Row';
-import React, { useCallback, useContext, useState } from 'react';
-import { IconSize, SVGIcon } from '../../resources/SVGIcon';
 import TrackChangesOutlinedIcon from '@mdi/svg/svg/radar.svg';
-import { Spacer } from '../layout/Spacer';
-import { StyledField, StyledPrimaryButton } from './StyledComponents';
-import { GoalsListContext } from './GoalsListContext';
-import { toaster } from '../common-features/NotificationMessages';
-import { isEmptyString } from '../../utils/StringUtils';
+import React, { useCallback, useContext, useState } from 'react';
 import { AppEvents, AppMediator } from '../../events/AppMediator';
+import { IconSize, SVGIcon } from '../../resources/SVGIcon';
+import { isEmptyString } from '../../utils/StringUtils';
+import { Row } from '../layout/Row';
+import { Spacer } from '../layout/Spacer';
+import { GoalsListContext } from './GoalsListContext';
+import { StyledField, StyledPrimaryButton } from './StyledComponents';
 
 export const GoalSetter = () => {
   const [goalText, setGoalText] = useState('');

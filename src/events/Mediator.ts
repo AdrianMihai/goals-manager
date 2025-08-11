@@ -31,11 +31,6 @@ export class Mediator {
   };
 
   asyncPublish = (eventName, args) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        this.publish(eventName, args);
-        resolve(null);
-      }, 0);
-    });
+    queueMicrotask(() => this.publish(eventName, args));
   };
 }

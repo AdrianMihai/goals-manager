@@ -1,7 +1,7 @@
 import { Draft, produce, setAutoFreeze } from 'immer';
-import { Mediator } from '../events/Mediator';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { mergeQueryArguments, QueryContext, QueryFunction, QueryHandler } from './Query';
+import { Mediator } from '../events/Mediator';
+import { QueryContext, QueryFunction, QueryHandler } from './Query';
 
 setAutoFreeze(false);
 
@@ -19,7 +19,7 @@ type EventsMap = Record<string, string>;
 type HandlerArgs<T> = {
   draft: Draft<T>;
   events: EventsMap;
-  queryBus: { publishResult: (eventName: string, args: any) => Promise<any> };
+  queryBus: { publishResult: (eventName: string, args: any) => any };
 };
 
 export interface Store<T> {
@@ -75,7 +75,7 @@ export const createStore = <T extends Record<string, any>>(
   const mediator = new Mediator(Object.keys(actionsHandlers));
   const queryMediator = new Mediator(Object.keys(queryHandlers));
   const queryBus = {
-    publishResult: (eventName, args) => queryMediator.asyncPublish(eventName, args),
+    publishResult: (eventName, args) => queryMediator.publish(eventName, args),
     onPublishedResult: (queryName: string, handler: (queryResult: any) => any) =>
       Object.keys(queries).includes(queryName) &&
       queryMediator.subscribe(queryName, (args) => handler(queries[queryName](args))),

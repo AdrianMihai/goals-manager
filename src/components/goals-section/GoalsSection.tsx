@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
-import { Goal, GoalPriority } from '../../models/Goal';
-import { GoalsListContext } from './GoalsListContext';
-import { GoalSetter } from './GoalSetter';
+import { analyzeRoadmap } from '../../api/GeminiApi';
+import { AppEvents, AppMediator } from '../../events/AppMediator';
+import { Goal } from '../../models/Goal';
+import { useStore } from '../../state/UseStore';
+import { GoalsStore, SubGoalsStore } from '../../stores/GoalsStore';
 import { Container } from '../layout/Container';
 import { GoalItem } from './goal-item/GoalItem';
-import { GoalsStore, SubGoalsStore } from '../../stores/GoalsStore';
-import { useStore } from '../../state/UseStore';
-import { AppEvents, AppMediator } from '../../events/AppMediator';
-import { analyzeRoadmap } from '../../api/GeminiApi';
+import { GoalSetter } from './GoalSetter';
+import { GoalsListContext } from './GoalsListContext';
 import { useScrollPositioning } from './UseScrollPositioning';
 
 const goalsComparer = (prev, next) => prev.goalsList !== next.goalsList;
