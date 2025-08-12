@@ -1,4 +1,6 @@
-export const isEmptyString = (val) => !val || val.length === 0;
+import { isNullOrUndefined } from './ObjectUtils';
+
+export const isEmptyString = (val) => isNullOrUndefined(val) || val.length === 0;
 
 export const capitalize = (val: string) => {
   if (isEmptyString(val)) {

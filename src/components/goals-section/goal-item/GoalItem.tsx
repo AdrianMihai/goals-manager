@@ -1,7 +1,19 @@
-import { Goal } from '../../../models/Goal';
-import { Row } from '../../layout/Row';
-import { Card } from '../../surfaces/Card';
+import { parseDate } from '@ark-ui/react';
 import React, { useCallback, useContext, useRef } from 'react';
+import { Goal } from '../../../models/Goal';
+import { capitalize } from '../../../utils/StringUtils';
+import { Conditional } from '../../Conditional';
+import { DatePicker } from '../../fields/date/DatePicker';
+import { useTimedToggle } from '../../hooks/Common';
+import { Container } from '../../layout/Container';
+import { Row } from '../../layout/Row';
+import { Spacer } from '../../layout/Spacer';
+import { Card } from '../../surfaces/Card';
+import { GoalsListContext } from '../GoalsListContext';
+import { GoalItemContext } from './GoalItemContext';
+import { ItemContextMenu } from './ItemContextMenu';
+import { PrioritySelect } from './PrioritySelect';
+import { Roadmap } from './Roadmap';
 import {
   StyledDueDateText,
   StyledGoalFooter,
@@ -9,25 +21,13 @@ import {
   StyledGoalTitle,
   StyledPriorityIndicator,
 } from './StyledComponents';
-import { Spacer } from '../../layout/Spacer';
-import { capitalize } from '../../../utils/StringUtils';
-import { Conditional } from '../../Conditional';
-import { PrioritySelect } from './PrioritySelect';
-import { GoalsListContext } from '../GoalsListContext';
-import { useTimedToggle } from '../../hooks/Common';
-import { Roadmap } from './Roadmap';
-import { Container } from '../../layout/Container';
-import { GoalItemContext } from './GoalItemContext';
-import { DatePicker } from '../../fields/date/DatePicker';
-import { parseDate } from '@ark-ui/react';
-import { ItemContextMenu } from './ItemContextMenu';
 
 type GoalItemProps = {
   data: Goal;
 };
 
 export const GoalItem = ({ data }: GoalItemProps) => {
-  const { isOn: isEditingActive, switchOn, delayedSwitchOff, switchOff } = useTimedToggle(false);
+  const { isOn: isEditingActive, switchOn, delayedSwitchOff, switchOff, cancelTimeout } = useTimedToggle(false, 1500);
   const { updateGoal } = useContext(GoalsListContext);
 
   const onPriorityChange = useCallback(
@@ -77,7 +77,11 @@ export const GoalItem = ({ data }: GoalItemProps) => {
         disableEditMode: switchOff,
       }}
     >
-      <Container data-item-identifier={`goal-item-${data.id}`} onMouseLeave={closeEditingMode}>
+      <Container
+        data-item-identifier={`goal-item-${data.id}`}
+        onMouseEnter={cancelTimeout}
+        onMouseLeave={closeEditingMode}
+      >
         <Card>
           <StyledGoalHeader mainAxisAlignment='between'>
             <StyledGoalTitle>{data.text}</StyledGoalTitle>

@@ -1,15 +1,15 @@
-import React, { useCallback, useContext, useEffect, useMemo } from 'react';
-import { StyledAnalysisCloseButton, StyledAnalysisPreviewButton, StyledAnalysisTitle } from './StyledComponents';
-import { Conditional } from '../../Conditional';
-import { GoalItemContext } from './GoalItemContext';
 import { marked } from 'marked';
+import React, { useCallback, useContext, useEffect, useMemo } from 'react';
+import { isEmptyString } from '../../../utils/StringUtils';
+import { Conditional } from '../../Conditional';
+import { useTimedToggle } from '../../hooks/Common';
 import { Container } from '../../layout/Container';
 import { Row } from '../../layout/Row';
-import { useTimedToggle } from '../../hooks/Common';
 import { Dialog } from '../../surfaces/dialog/Dialog';
-import { StyledDialogFooter } from '../../surfaces/dialog/StyledComponents';
 import { DialogBody } from '../../surfaces/dialog/DialogBody';
-import { isNullOrUndefined } from '../../../utils/ObjectUtils';
+import { StyledDialogFooter } from '../../surfaces/dialog/StyledComponents';
+import { GoalItemContext } from './GoalItemContext';
+import { StyledAnalysisCloseButton, StyledAnalysisPreviewButton, StyledAnalysisTitle } from './StyledComponents';
 
 export const AnalysisPreview = ({ analysisData }) => {
   const { goalData, freezeEditMode, unFreezeEditMode } = useContext(GoalItemContext);
@@ -34,7 +34,7 @@ export const AnalysisPreview = ({ analysisData }) => {
 
   return (
     <>
-      <Conditional when={!isNullOrUndefined(analysisData.analysisContent)}>
+      <Conditional when={!isEmptyString(analysisData.analysisContent)}>
         <StyledAnalysisPreviewButton onClick={open}>View Analysis</StyledAnalysisPreviewButton>
       </Conditional>
       <Dialog open={isOpen} onOpenChange={onOpenChange}>

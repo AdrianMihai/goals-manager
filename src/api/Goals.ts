@@ -1,17 +1,14 @@
 import axios from 'axios';
-import { Goal, GoalPriority } from '../models/Goal';
+import { Goal } from '../models/Goal';
 import { GoalsStore } from '../stores/GoalsStore';
-import { GoalCreationData } from './Types';
-import { v6 } from 'uuid';
-import { AppEvents, AppMediator } from '../events/AppMediator';
 
-const BASE_URL = 'localhost:3000/goals';
+const BASE_URL = 'http://localhost:3000/goals';
 
 export const fetchAllGoals = async () => {
   let result: Goal[] = [];
 
   try {
-    result = await axios.get(BASE_URL);
+    result = (await axios.get(BASE_URL)).data;
   } catch (e) {
     console.log('error fetching goals', e.message);
   }
@@ -26,4 +23,26 @@ export const fetchAllGoals = async () => {
   });
 };
 
-export const addNewGoal = ({ text }: GoalCreationData) => {};
+export const addNewGoal = async (goalData: Goal) => {
+  try {
+    const response = await axios.post(BASE_URL, goalData, {
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    });
+
+    console.log(response.data);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const deleteGoal = async (goalId: string) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/${goalId}`);
+
+    GoalsStore.dispatchAction(GoalsStore.events.deleteGoal, { goalId });
+
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};

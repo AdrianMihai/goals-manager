@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
+import { useDeferredEffect } from '../../common-hooks/UseDeferredEffect';
 import { isEmptyString } from '../../utils/StringUtils';
 
 export const useScrollPositioning = (items) => {
   const itemIdentifierToScroll = useRef(null);
 
-  useEffect(() => {
+  useDeferredEffect(() => {
     if (isEmptyString(itemIdentifierToScroll.current)) return;
 
     document

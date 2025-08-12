@@ -8,12 +8,15 @@ import { Container } from '../layout/Container';
 import { GoalItem } from './goal-item/GoalItem';
 import { GoalSetter } from './GoalSetter';
 import { GoalsListContext } from './GoalsListContext';
+import { useGoalsHandlers } from './UseGoalsHandlers';
 import { useScrollPositioning } from './UseScrollPositioning';
 
 const goalsComparer = (prev, next) => prev.goalsList !== next.goalsList;
 
 export const GoalsSection = () => {
   const [{ goalsList }] = useStore(GoalsStore, goalsComparer);
+
+  useGoalsHandlers();
 
   const { setItemToScroll } = useScrollPositioning(goalsList);
 

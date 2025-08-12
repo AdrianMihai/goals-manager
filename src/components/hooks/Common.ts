@@ -1,29 +1,31 @@
 import { useCallback, useRef, useState } from 'react';
 
-export const useTimedToggle = (initialValue: boolean) => {
+export const useTimedToggle = (initialValue: boolean, delay = 300) => {
   const [isOn, setIsOn] = useState(initialValue);
   const intervalId = useRef(null);
 
+  const cancelTimeout = useCallback(() => clearInterval(intervalId.current), []);
   const switchOn = useCallback(() => {
-    clearInterval(intervalId.current);
+    cancelTimeout();
     setIsOn(true);
-  }, []);
+  }, [cancelTimeout]);
 
   const switchOff = useCallback(() => {
-    clearInterval(intervalId.current);
+    cancelTimeout();
     setIsOn(false);
-  }, []);
+  }, [cancelTimeout]);
 
   const delayedSwitchOff = useCallback(() => {
     intervalId.current = setTimeout(() => {
       setIsOn(false);
-    }, 300);
-  }, []);
+    }, delay);
+  }, [delay]);
 
   return {
     isOn,
     switchOn,
     switchOff,
     delayedSwitchOff,
+    cancelTimeout,
   };
 };

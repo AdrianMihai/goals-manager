@@ -1,16 +1,16 @@
-import React, { useContext } from 'react';
 import { Menu } from '@ark-ui/react';
-import { Button } from '../../buttons/Button';
-import { SVGIcon } from '../../../resources/SVGIcon';
-import DotsVertical from '@mdi/svg/svg/dots-vertical.svg';
 import Bin from '@mdi/svg/svg/delete.svg';
+import DotsVertical from '@mdi/svg/svg/dots-vertical.svg';
+import PencilOff from '@mdi/svg/svg/pencil-off.svg';
+import Pencil from '@mdi/svg/svg/pencil.svg';
+import React, { useContext } from 'react';
+import { AppEvents, AppMediator } from '../../../events/AppMediator';
+import { SVGIcon } from '../../../resources/SVGIcon';
+import { Button } from '../../buttons/Button';
 import { Spacer } from '../../layout/Spacer';
-import { StyledGoalItemButton } from './StyledComponents';
 import { StyledContextMenuContent } from '../../surfaces/StyledComponents';
 import { GoalItemContext } from './GoalItemContext';
-import Pencil from '@mdi/svg/svg/pencil.svg';
-import PencilOff from '@mdi/svg/svg/pencil-off.svg';
-import { GoalsStore } from '../../../stores/GoalsStore';
+import { StyledGoalItemButton } from './StyledComponents';
 
 export const ItemContextMenu = () => {
   const { goalData, isEditingActive, enableEditMode, disableEditMode } = useContext(GoalItemContext);
@@ -35,9 +35,7 @@ export const ItemContextMenu = () => {
               </StyledGoalItemButton>
             </Menu.Item>
             <Menu.Item value='delete'>
-              <StyledGoalItemButton
-                onClick={() => GoalsStore.dispatchAction(GoalsStore.events.deleteGoal, { goalId: goalData.id })}
-              >
+              <StyledGoalItemButton onClick={() => AppMediator.publish(AppEvents.deleteGoal, { goalId: goalData.id })}>
                 <SVGIcon>
                   <Bin />
                 </SVGIcon>

@@ -75,7 +75,7 @@ export const createStore = <T extends Record<string, any>>(
   const mediator = new Mediator(Object.keys(actionsHandlers));
   const queryMediator = new Mediator(Object.keys(queryHandlers));
   const queryBus = {
-    publishResult: (eventName, args) => queryMediator.publish(eventName, args),
+    publishResult: (eventName, args) => queryMediator.asyncPublish(eventName, args),
     onPublishedResult: (queryName: string, handler: (queryResult: any) => any) =>
       Object.keys(queries).includes(queryName) &&
       queryMediator.subscribe(queryName, (args) => handler(queries[queryName](args))),
@@ -103,6 +103,7 @@ export const createStore = <T extends Record<string, any>>(
     handler();
 
     dataContainer.isNotificationPaused = false;
+    dataObservable.next({ current: dataContainer.value, previous: dataContainer._previousValue });
   };
 
   return {

@@ -3,7 +3,7 @@ import { Mediator } from './Mediator';
 export const AppEvents = {
   analyzeRoadmap: 'analyzeRoadmap',
   showNotificationMessage: 'showNotificationMessage',
-  goalInserted: 'goalInserted',
+  deleteGoal: 'deleteGoal',
 };
 
 export const AppMediator = new Mediator(Object.values(AppEvents));
