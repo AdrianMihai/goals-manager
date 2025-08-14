@@ -58,7 +58,7 @@ export const StyledBasicSelectInput = styled(Select.Root)`
     border: ${({ theme }) => theme.field.defaultBorder};
     outline: none;
 
-    &:focus,
+    &:focus-within,
     &:active {
       border: ${({ theme }) => theme.field.hoverBorder};
     }

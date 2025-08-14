@@ -1,20 +1,41 @@
-import { createListCollection, Portal, Select } from '@ark-ui/react';
+import { Select } from '@ark-ui/react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { GoalPriority } from '../../../models/Goal';
 import { mapValuesOnly } from '../../../utils/ObjectUtils';
-import React, { useCallback, useContext, useMemo, useState } from 'react';
-import ArrowDropDown from '@mdi/svg/svg/menu-down.svg';
-import { StyledPriorityIndicator } from './StyledComponents';
-import { SVGIcon } from '../../../resources/SVGIcon';
-import { Spacer } from '../../layout/Spacer';
-import { Row } from '../../layout/Row';
-import { StyledBasicSelectContent, StyledBasicSelectInput } from '../../fields/StyledComponents';
+import { SelectInput } from '../../fields/select/SelectInput';
 import { Container } from '../../layout/Container';
-import CheckedIcon from '@mdi/svg/svg/check-bold.svg';
+import { Row } from '../../layout/Row';
+import { Spacer } from '../../layout/Spacer';
 import { GoalItemContext } from './GoalItemContext';
+import { StyledPriorityIndicator } from './StyledComponents';
 
 type SelectProps = {
   onChange: (value: GoalPriority) => void;
 };
+
+const fieldValueRenderer = ({ value }) => {
+  return (
+    <Row>
+      <StyledPriorityIndicator priority={value} />
+      <Spacer size={8} />
+      <Select.ValueText />
+    </Row>
+  );
+};
+
+const onContentItemRender = ({ priorityName, value }): React.ReactNode => {
+  return (
+    <Container verticalSpacing={10} horizontalSpacing={8}>
+      <Row crossAxisAlignment='center'>
+        <StyledPriorityIndicator priority={value} />
+        <Spacer size={8} />
+        {priorityName}
+      </Row>
+    </Container>
+  );
+};
+
+const collectionItemResolver = ({ priorityName, value }) => ({ label: priorityName, value });
 
 export const PrioritySelect = ({ onChange }: SelectProps) => {
   const { goalData } = useContext(GoalItemContext);
@@ -28,60 +49,20 @@ export const PrioritySelect = ({ onChange }: SelectProps) => {
   const items = useMemo(
     () =>
       Object.entries(mapValuesOnly(GoalPriority)).map(([key, priorityValue]) => ({
-        label: key,
+        priorityName: key,
         value: priorityValue as GoalPriority,
       })),
     []
   );
 
-  const selectItems = createListCollection({ items });
-
   return (
-    <StyledBasicSelectInput value={[value]} onValueChange={onValueChange} collection={selectItems}>
-      <Select.Control>
-        <Select.Trigger>
-          <Row mainAxisAlignment='between'>
-            <Row>
-              <StyledPriorityIndicator priority={value} />
-              <Spacer size={8} />
-              <Select.ValueText />
-            </Row>
-            <Select.Indicator>
-              <SVGIcon>
-                <ArrowDropDown />
-              </SVGIcon>
-            </Select.Indicator>
-          </Row>
-        </Select.Trigger>
-      </Select.Control>
-      <Portal>
-        <Select.Positioner>
-          <StyledBasicSelectContent>
-            {selectItems.items.map((item) => (
-              <Select.Item key={item.value} item={item}>
-                <Container verticalSpacing={10} horizontalSpacing={8}>
-                  <Row mainAxisAlignment='between' crossAxisAlignment='center'>
-                    <Select.ItemText>
-                      <Row crossAxisAlignment='center'>
-                        <StyledPriorityIndicator priority={item.value} />
-                        <Spacer size={8} />
-                        {item.label}
-                      </Row>
-                    </Select.ItemText>
-                    <Spacer size={50} />
-                    <Select.ItemIndicator>
-                      <SVGIcon>
-                        <CheckedIcon />
-                      </SVGIcon>
-                    </Select.ItemIndicator>
-                  </Row>
-                </Container>
-              </Select.Item>
-            ))}
-          </StyledBasicSelectContent>
-        </Select.Positioner>
-      </Portal>
-      <Select.HiddenSelect />
-    </StyledBasicSelectInput>
+    <SelectInput
+      collectionItemResolver={collectionItemResolver}
+      onFieldValueRender={fieldValueRenderer}
+      onContentItemRender={onContentItemRender}
+      data={items}
+      value={[value]}
+      onValueChange={onValueChange}
+    />
   );
 };

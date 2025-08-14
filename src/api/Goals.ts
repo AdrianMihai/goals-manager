@@ -1,16 +1,20 @@
 import axios from 'axios';
-import { Goal } from '../models/Goal';
-import { GoalsStore } from '../stores/GoalsStore';
+import { AppEvents, AppMediator } from '../events/AppMediator';
+import { Goal, SubGoal } from '../models/Goal';
+import { GoalsStore, SubGoalsStore } from '../stores/GoalsStore';
 
 const BASE_URL = 'http://localhost:3000/goals';
+const headers = { 'Content-Type': 'application/json', Accept: 'application/json' };
 
 export const fetchAllGoals = async () => {
-  let result: Goal[] = [];
+  let result = [];
 
   try {
     result = (await axios.get(BASE_URL)).data;
   } catch (e) {
     console.log('error fetching goals', e.message);
+
+    AppMediator.publish(AppEvents.showNotificationMessage, { type: 'error', title: 'Error fetching goals.' });
   }
 
   if (result.length === 0) return;
@@ -20,16 +24,33 @@ export const fetchAllGoals = async () => {
       GoalsStore.events.setGoals,
       result.map((val) => ({ ...val, subGoals: undefined, roadmapAnalysis: undefined }))
     );
+
+    for (const goalData of result) {
+      SubGoalsStore.dispatchAction(SubGoalsStore.events.setSubGoals, {
+        goalId: goalData.id,
+        allSubGoals: goalData.subGoals,
+      });
+    }
   });
 };
 
 export const addNewGoal = async (goalData: Goal) => {
   try {
     const response = await axios.post(BASE_URL, goalData, {
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      headers,
     });
 
     console.log(response.data);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const updateGoal = async (goalData: Goal) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/${goalData.id}`, goalData, { headers });
+
+    return response.data;
   } catch (e) {
     console.log(e);
   }
@@ -40,6 +61,18 @@ export const deleteGoal = async (goalId: string) => {
     const response = await axios.delete(`${BASE_URL}/${goalId}`);
 
     GoalsStore.dispatchAction(GoalsStore.events.deleteGoal, { goalId });
+
+    return response.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const addSubGoal = async (goalId: string, subGoalData: SubGoal) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/${goalId}/add-subGoal`, subGoalData, {
+      headers,
+    });
 
     return response.data;
   } catch (e) {

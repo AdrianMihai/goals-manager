@@ -1,6 +1,12 @@
+import Loading from '@mdi/svg/svg/loading.svg';
 import React, { useContext, useMemo } from 'react';
-import { Container } from '../../layout/Container';
-import { SubGoalsActions } from './SubGoalsActions';
+import { EmptyRoadmap } from '../../../models/Goal';
+import { IconSize } from '../../../resources/SVGIcon';
+import { useStore } from '../../../state/UseStore';
+import { GoalsCollection, GoalsStore, SubGoalsStore } from '../../../stores/GoalsStore';
+import { Conditional } from '../../Conditional';
+import { LoadingBackdrop } from '../../surfaces/LoadingBackdrop';
+import { GoalItemContext } from './GoalItemContext';
 import {
   StyledAnalysisLoadingSpinner,
   StyledRoadmapItemLink,
@@ -8,14 +14,7 @@ import {
   StyledSubGoalCard,
   StyledSubGoalTitle,
 } from './StyledComponents';
-import { useStore } from '../../../state/UseStore';
-import { GoalsCollection, GoalsStore, SubGoalsStore } from '../../../stores/GoalsStore';
-import { GoalItemContext } from './GoalItemContext';
-import { LoadingBackdrop } from '../../surfaces/LoadingBackdrop';
-import Loading from '@mdi/svg/svg/loading.svg';
-import { IconSize } from '../../../resources/SVGIcon';
-import { Conditional } from '../../Conditional';
-import { EmptyRoadmap } from '../../../models/Goal';
+import { SubGoalsActions } from './SubGoalsActions';
 
 const comparer = (prev, next) => prev.subGoals !== next.subGoals;
 
@@ -35,12 +34,12 @@ export const Roadmap = () => {
   return (
     <StyledRoadmapWrapper ratio={80} verticalSpacing={20}>
       {matchingSubGoals.map((value, index) => (
-        <>
+        <React.Fragment key={`sub-goal-${value.id}-${index}`}>
           <StyledRoadmapItemLink key={`sub-goal-link-${value.id}-${index}`} ratio={90} verticalSpacing={20} />
-          <StyledSubGoalCard key={`sub-goal-${value.id}-${index}`}>
+          <StyledSubGoalCard>
             <StyledSubGoalTitle>{value.text}</StyledSubGoalTitle>
           </StyledSubGoalCard>
-        </>
+        </React.Fragment>
       ))}
 
       <SubGoalsActions subGoals={matchingSubGoals} roadmapData={roadmapData} />

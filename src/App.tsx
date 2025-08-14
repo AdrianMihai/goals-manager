@@ -1,10 +1,10 @@
-import React from 'react';
 import { ThemeProvider } from '@emotion/react';
-import { ThemeValues } from './theme/ThemeValues';
-import { Container } from './components/layout/Container';
-import { GoalsSection } from './components/goals-section/GoalsSection';
-import './types.d.ts';
+import React from 'react';
 import { NotificationMessages } from './components/common-features/NotificationMessages';
+import { GoalsSection } from './components/goals-section/GoalsSection';
+import { Container } from './components/layout/Container';
+import { ThemeValues } from './theme/ThemeValues';
+import './types.d.ts';
 
 export const App = () => {
   return (

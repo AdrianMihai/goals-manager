@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { addNewGoal, deleteGoal, fetchAllGoals } from '../../api/Goals';
+import { addNewGoal, addSubGoal, deleteGoal, fetchAllGoals } from '../../api/Goals';
 import { AppEvents, AppMediator } from '../../events/AppMediator';
-import { GoalsStore } from '../../stores/GoalsStore';
+import { GoalsStore, SubGoalsStore } from '../../stores/GoalsStore';
 
 export const useGoalsHandlers = () => {
   useEffect(() => {
@@ -25,9 +25,17 @@ export const useGoalsHandlers = () => {
       });
     });
 
+    const subGoalAddSubscription = SubGoalsStore.onPublishedResult(
+      SubGoalsStore.events.subGoalAdded,
+      ({ subGoal, goalId }) => {
+        addSubGoal(goalId, subGoal);
+      }
+    );
+
     return () => {
       insertUserSubscription.unsubscribe();
       deleteGoalSubscription.unsubscribe();
+      subGoalAddSubscription.unsubscribe();
     };
   }, []);
 };

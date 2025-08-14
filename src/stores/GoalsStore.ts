@@ -68,20 +68,38 @@ type SubGoalsCollection = {
 export const SubGoalsStore = createStore<SubGoalsCollection>(
   { subGoals: {} },
   {
-    addSubGoal: ({ draft }, { goalId, text }) => {
+    addSubGoal: ({ draft, queryBus, events }, { goalId, text }) => {
       if (!draft.subGoals[goalId]) {
         draft.subGoals[goalId] = [];
       }
 
-      draft.subGoals[goalId].push({
+      const newSubGoal = {
         id: v6(),
         goalId,
         text,
         isCompleted: false,
-      });
+      };
+
+      draft.subGoals[goalId].push(newSubGoal);
+      queryBus.publishResult(events.subGoalAdded, { newSubGoal });
     },
     setSubGoals: ({ draft }, { goalId, allSubGoals }) => {
       draft.subGoals[goalId] = allSubGoals;
     },
+  },
+  {
+    findParentGoalById: (data, { subGoalId }) => {
+      for (const goalId in data.subGoals) {
+        if (data.subGoals[goalId].find((val) => val.id === subGoalId)) {
+          return goalId;
+        }
+      }
+
+      return null;
+    },
+    subGoalAdded: (_, { newSubGoal }) => ({
+      subGoal: newSubGoal,
+      goalId: SubGoalsStore.queries.findParentGoalById({ subGoalId: newSubGoal.id }),
+    }),
   }
 );
