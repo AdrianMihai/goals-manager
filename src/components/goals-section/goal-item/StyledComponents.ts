@@ -8,6 +8,10 @@ import { Card } from '../../surfaces/Card';
 import { css, keyframes } from '@emotion/react';
 import { SVGIcon } from '../../../resources/SVGIcon';
 
+export const StyledItemWrapper = styled(Container)`
+  position: relative;
+`;
+
 export const StyledGoalTitle = styled.h1`
   margin: 0;
   font-weight: 500;

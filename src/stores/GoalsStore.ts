@@ -1,6 +1,7 @@
 import { v6 } from 'uuid';
 import { EmptyRoadmap, Goal, GoalPriority, GoalRoadmap, SubGoal } from '../models/Goal';
 import { createStore } from '../state/StoreBuilder';
+import { isEmptyString } from '../utils/StringUtils';
 
 export type GoalsCollection = {
   goalsList: Goal[];
@@ -16,10 +17,11 @@ export const GoalsStore = createStore<GoalsCollection>(
       draft.goalsList.push(newGoal);
       queryBus.publishResult(events.newGoalInserted, { newGoal });
     },
-    updateGoal: ({ draft }, { goal: goal }) => {
+    updateGoal: ({ draft, queryBus, events }, { goal: goal }) => {
       const itemIndex = draft.goalsList.findIndex((val) => val.id === goal.id);
 
       draft.goalsList.splice(itemIndex, 1, goal);
+      queryBus.publishResult(events.goalUpdated, { updatedGoal: goal });
     },
     deleteGoal: ({ draft, queryBus, events }, { goalId }) => {
       const deletedGoal = draft.goalsList.find((item) => item.id === goalId);
@@ -39,15 +41,17 @@ export const GoalsStore = createStore<GoalsCollection>(
         isAnalysisInProgress: true,
       };
     },
-    analysisReceived: ({ draft }, { goalId, analysis }) => {
-      if (!draft.roadmapAnalysis[goalId]) {
-        draft.roadmapAnalysis[goalId] = EmptyRoadmap;
+    analysisReceived: ({ draft }, { id, roadmapAnalysis }) => {
+      if (isEmptyString(roadmapAnalysis)) return;
+
+      if (!draft.roadmapAnalysis[id]) {
+        draft.roadmapAnalysis[id] = EmptyRoadmap;
       }
 
-      draft.roadmapAnalysis[goalId] = {
-        ...draft.roadmapAnalysis[goalId],
+      draft.roadmapAnalysis[id] = {
+        ...draft.roadmapAnalysis[id],
         isAnalysisInProgress: false,
-        analysisContent: analysis,
+        analysisContent: roadmapAnalysis,
       };
     },
     setGoals: ({ draft }, allGoals) => {
@@ -57,6 +61,7 @@ export const GoalsStore = createStore<GoalsCollection>(
   {
     newGoalInserted: (_, { newGoal }) => newGoal,
     goalDeleted: (_, { deletedGoal }) => deletedGoal,
+    goalUpdated: (_, { updatedGoal }) => updatedGoal,
     getByPriority: (data, { priority }) => data.goalsList.filter((val) => val.priority === priority),
   }
 );

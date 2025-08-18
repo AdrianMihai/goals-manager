@@ -2,6 +2,7 @@ import axios from 'axios';
 import { AppEvents, AppMediator } from '../events/AppMediator';
 import { Goal, SubGoal } from '../models/Goal';
 import { GoalsStore, SubGoalsStore } from '../stores/GoalsStore';
+import { GoalUpdateData } from './Types';
 
 const BASE_URL = 'http://localhost:3000/goals';
 const headers = { 'Content-Type': 'application/json', Accept: 'application/json' };
@@ -26,6 +27,11 @@ export const fetchAllGoals = async () => {
     );
 
     for (const goalData of result) {
+      GoalsStore.dispatchAction(GoalsStore.events.analysisReceived, {
+        id: goalData.id,
+        roadmapAnalysis: goalData.roadmapAnalysis,
+      });
+
       SubGoalsStore.dispatchAction(SubGoalsStore.events.setSubGoals, {
         goalId: goalData.id,
         allSubGoals: goalData.subGoals,
@@ -46,7 +52,7 @@ export const addNewGoal = async (goalData: Goal) => {
   }
 };
 
-export const updateGoal = async (goalData: Goal) => {
+export const updateGoal = async (goalData: Goal | GoalUpdateData) => {
   try {
     const response = await axios.put(`${BASE_URL}/${goalData.id}`, goalData, { headers });
 

@@ -19,8 +19,10 @@ import {
   StyledGoalFooter,
   StyledGoalHeader,
   StyledGoalTitle,
+  StyledItemWrapper,
   StyledPriorityIndicator,
 } from './StyledComponents';
+import { AnalysisPreview } from './AnalysisPreview';
 
 type GoalItemProps = {
   data: Goal;
@@ -77,7 +79,7 @@ export const GoalItem = ({ data }: GoalItemProps) => {
         disableEditMode: switchOff,
       }}
     >
-      <Container
+      <StyledItemWrapper
         data-item-identifier={`goal-item-${data.id}`}
         onMouseEnter={cancelTimeout}
         onMouseLeave={closeEditingMode}
@@ -114,7 +116,8 @@ export const GoalItem = ({ data }: GoalItemProps) => {
         <Conditional when={isEditingActive}>
           <Roadmap />
         </Conditional>
-      </Container>
+        <AnalysisPreview />
+      </StyledItemWrapper>
     </GoalItemContext>
   );
 };

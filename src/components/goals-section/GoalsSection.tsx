@@ -36,17 +36,6 @@ export const GoalsSection = () => {
     GoalsStore.dispatchAction(GoalsStore.events.updateGoal, { goal });
   }, []);
 
-  useEffect(() => {
-    const analysisTriggerObserver = AppMediator.subscribe(AppEvents.analyzeRoadmap, ({ goalId }) => {
-      analyzeRoadmap({
-        goal: GoalsStore.dataContainer.value.goalsList.find((val) => val.id === goalId),
-        subGoals: SubGoalsStore.dataContainer.value.subGoals[goalId],
-      });
-    });
-
-    return () => analysisTriggerObserver.unsubscribe();
-  }, []);
-
   return (
     <GoalsListContext.Provider value={{ goalsList, addGoal, updateGoal }}>
       <GoalSetter />

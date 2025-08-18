@@ -3,6 +3,7 @@ import AddIcon from '@mdi/svg/svg/map-plus.svg';
 import {
   StyledAddSubGoalButton,
   StyledAnalysisButton,
+  StyledAnalysisPreviewButton,
   StyledNewRoadmapItemLink,
   StyledSubGoalCreatorContainer,
 } from './StyledComponents';
@@ -16,7 +17,7 @@ import { Row } from '../../layout/Row';
 import { SubGoalCreator } from './SubGoalCreator';
 import ChartIcon from '@mdi/svg/svg/chart-scatter-plot.svg';
 import { AppEvents, AppMediator } from '../../../events/AppMediator';
-import { AnalysisPreview } from './AnalysisPreview';
+import { isEmptyString } from '../../../utils/StringUtils';
 
 export const SubGoalsActions = ({ subGoals, roadmapData }) => {
   const [isAddingSubGoal, setIsAddingSubGoal] = useState(false);
@@ -63,7 +64,13 @@ export const SubGoalsActions = ({ subGoals, roadmapData }) => {
                 Analyze roadmap
               </StyledAnalysisButton>
               <Spacer size={16} />
-              <AnalysisPreview analysisData={roadmapData} />
+              <Conditional when={!isEmptyString(roadmapData.analysisContent)}>
+                <StyledAnalysisPreviewButton
+                  onClick={() => AppMediator.publish(AppEvents.showRoadmapAnalysis, { goalId: goalData.id })}
+                >
+                  View Analysis
+                </StyledAnalysisPreviewButton>
+              </Conditional>
             </Row>
           </Col>
         </Conditional>

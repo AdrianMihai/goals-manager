@@ -39,9 +39,16 @@ const AlignmentValues = {
   grouped: 'space-around',
 };
 
+const WrapValues = {
+  wrap: 'wrap',
+  nowrap: 'nowrap',
+  reverse: 'wrap-reverse',
+};
+
 const flexContainerStyles = (props: FlexContainerCofiguration) => css`
   justify-content: ${AlignmentValues[props.mainAxisAlignment]};
   align-items: ${AlignmentValues[props.crossAxisAlignment]};
+  flex-wrap: ${WrapValues[props.wrap]};
 `;
 
 export const StyledRow = styled.div<FlexContainerCofiguration & FlexRowConfiguration>`

@@ -12,9 +12,12 @@ export type MainAxisAlignment = 'start' | 'center' | 'end' | 'between' | 'evenly
 
 export type CrossAxisAlignment = 'start' | 'end' | 'center';
 
+export type FlexWrap = 'wrap' | 'nowrap' | 'reverse';
+
 export type FlexContainerCofiguration = {
   mainAxisAlignment: MainAxisAlignment;
   crossAxisAlignment: CrossAxisAlignment;
+  wrap: FlexWrap;
 };
 
 export type FlexRowConfiguration = {

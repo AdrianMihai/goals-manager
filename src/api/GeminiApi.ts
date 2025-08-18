@@ -11,7 +11,7 @@ const getRoadmapPrompt = (data: RoadmapData) => {
 const extractBasicTextResponse = (responseData) => responseData.candidates[0].content.parts[0].text;
 
 export const analyzeRoadmap = async (data: RoadmapData) => {
-  let analysisContent = '';
+  let result = { id: data.goal.id, roadmapAnalysis: '' };
 
   try {
     GoalsStore.dispatchAction(GoalsStore.events.startRoadmapAnalysis, { goalId: data.goal.id });
@@ -33,10 +33,12 @@ export const analyzeRoadmap = async (data: RoadmapData) => {
       }
     );
 
-    analysisContent = extractBasicTextResponse(response.data);
+    result.roadmapAnalysis = extractBasicTextResponse(response.data);
   } catch (e) {
     console.log(e.message);
-  } finally {
-    GoalsStore.dispatchAction(GoalsStore.events.analysisReceived, { goalId: data.goal.id, analysis: analysisContent });
+
+    return null;
   }
+
+  return result;
 };

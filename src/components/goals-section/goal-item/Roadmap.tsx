@@ -1,4 +1,3 @@
-import Loading from '@mdi/svg/svg/loading.svg';
 import React, { useContext, useMemo } from 'react';
 import { EmptyRoadmap } from '../../../models/Goal';
 import { IconSize } from '../../../resources/SVGIcon';
@@ -43,13 +42,6 @@ export const Roadmap = () => {
       ))}
 
       <SubGoalsActions subGoals={matchingSubGoals} roadmapData={roadmapData} />
-      <Conditional when={roadmapData.isAnalysisInProgress}>
-        <LoadingBackdrop>
-          <StyledAnalysisLoadingSpinner size={IconSize.VeryLarge}>
-            <Loading />
-          </StyledAnalysisLoadingSpinner>
-        </LoadingBackdrop>
-      </Conditional>
     </StyledRoadmapWrapper>
   );
 };
