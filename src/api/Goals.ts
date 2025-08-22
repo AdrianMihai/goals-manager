@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { AppEvents, AppMediator } from '../events/AppMediator';
-import { Goal, SubGoal } from '../models/Goal';
+import { createAnalysis, Goal, SubGoal } from '../models/Goal';
 import { GoalsStore, SubGoalsStore } from '../stores/GoalsStore';
 import { GoalUpdateData } from './Types';
 
@@ -21,17 +21,15 @@ export const fetchAllGoals = async () => {
   if (result.length === 0) return;
 
   GoalsStore.batchActions(() => {
-    GoalsStore.dispatchAction(
-      GoalsStore.events.setGoals,
-      result.map((val) => ({ ...val, subGoals: undefined, roadmapAnalysis: undefined }))
-    );
+    GoalsStore.update(({ draft }) => {
+      draft.goalsList = result.map((val) => ({ ...val, subGoals: undefined, roadmapAnalysis: undefined }));
+
+      for (const goalData of result) {
+        draft.roadmapAnalysis[goalData.id] = createAnalysis(goalData.roadmapAnalysis);
+      }
+    });
 
     for (const goalData of result) {
-      GoalsStore.dispatchAction(GoalsStore.events.analysisReceived, {
-        id: goalData.id,
-        roadmapAnalysis: goalData.roadmapAnalysis,
-      });
-
       SubGoalsStore.dispatchAction(SubGoalsStore.events.setSubGoals, {
         goalId: goalData.id,
         allSubGoals: goalData.subGoals,

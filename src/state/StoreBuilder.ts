@@ -27,12 +27,13 @@ export interface Store<T> {
   subscribe: SubscriberFn<T>;
   events: EventsMap;
   dispatchAction: (eventName: string, args: any) => void;
+  update: (handler: (handlerArgs: HandlerArgs<T>) => void) => void;
   batchActions: (handler: any) => void;
   queries: Record<string, QueryFunction>;
   onPublishedResult: QueryObserverFn;
 }
 
-const eventHandler = (eventArgs, handler, { dataContainer, dataObservable, queryBus, events }) => {
+const triggerDataUpdate = (eventArgs, handler, { dataContainer, dataObservable, queryBus, events }) => {
   const nextState = produce(dataContainer.value, (draft) => {
     handler({ draft, events, queryBus }, eventArgs);
   });
@@ -83,7 +84,7 @@ export const createStore = <T extends Record<string, any>>(
 
   for (const [eventName, handler] of Object.entries(actionsHandlers)) {
     mediator.subscribe(eventName, (args) =>
-      eventHandler(args, handler, { dataContainer, dataObservable, queryBus, events: eventsMap })
+      triggerDataUpdate(args, handler, { dataContainer, dataObservable, queryBus, events: eventsMap })
     );
   }
 
@@ -96,6 +97,9 @@ export const createStore = <T extends Record<string, any>>(
 
     return observer;
   };
+
+  const update = (handler: (args: HandlerArgs<T>) => void) =>
+    triggerDataUpdate(undefined, handler, { dataContainer, dataObservable, queryBus, events: eventsMap });
 
   const batchActions = (handler: () => void) => {
     dataContainer.isNotificationPaused = true;
@@ -112,6 +116,7 @@ export const createStore = <T extends Record<string, any>>(
     events: eventsMap,
     dispatchAction: mediator.publish,
     queries,
+    update,
     batchActions,
     onPublishedResult: queryBus.onPublishedResult,
   };

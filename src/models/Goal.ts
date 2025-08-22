@@ -1,3 +1,5 @@
+import { isEmptyString } from '../utils/StringUtils';
+
 export enum GoalPriority {
   Low = 'low',
   Medium = 'medium',
@@ -24,3 +26,9 @@ export type GoalRoadmap = {
 };
 
 export const EmptyRoadmap = { isAnalysisInProgress: false, analysisContent: '' };
+
+export const createAnalysis = (data: string): GoalRoadmap => {
+  if (isEmptyString(data)) return EmptyRoadmap;
+
+  return { analysisContent: data, isAnalysisInProgress: false };
+};

@@ -1,7 +1,6 @@
 import { v6 } from 'uuid';
-import { EmptyRoadmap, Goal, GoalPriority, GoalRoadmap, SubGoal } from '../models/Goal';
+import { createAnalysis, EmptyRoadmap, Goal, GoalPriority, GoalRoadmap, SubGoal } from '../models/Goal';
 import { createStore } from '../state/StoreBuilder';
-import { isEmptyString } from '../utils/StringUtils';
 
 export type GoalsCollection = {
   goalsList: Goal[];
@@ -42,17 +41,7 @@ export const GoalsStore = createStore<GoalsCollection>(
       };
     },
     analysisReceived: ({ draft }, { id, roadmapAnalysis }) => {
-      if (isEmptyString(roadmapAnalysis)) return;
-
-      if (!draft.roadmapAnalysis[id]) {
-        draft.roadmapAnalysis[id] = EmptyRoadmap;
-      }
-
-      draft.roadmapAnalysis[id] = {
-        ...draft.roadmapAnalysis[id],
-        isAnalysisInProgress: false,
-        analysisContent: roadmapAnalysis,
-      };
+      draft.roadmapAnalysis[id] = createAnalysis(roadmapAnalysis);
     },
     setGoals: ({ draft }, allGoals) => {
       draft.goalsList = allGoals;
