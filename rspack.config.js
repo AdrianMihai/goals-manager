@@ -71,5 +71,6 @@ module.exports = {
     compress: true,
     port: 9000,
     static: path.join(__dirname, 'public'),
+    historyApiFallback: true,
   },
 };

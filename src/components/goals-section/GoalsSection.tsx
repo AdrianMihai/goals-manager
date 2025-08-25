@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
-import { analyzeRoadmap } from '../../api/GeminiApi';
-import { AppEvents, AppMediator } from '../../events/AppMediator';
 import { Goal } from '../../models/Goal';
 import { useStore } from '../../state/UseStore';
-import { GoalsStore, SubGoalsStore } from '../../stores/GoalsStore';
+import { GoalsStore } from '../../stores/GoalsStore';
 import { Container } from '../layout/Container';
 import { GoalItem } from './goal-item/GoalItem';
 import { GoalSetter } from './GoalSetter';
@@ -38,14 +36,16 @@ export const GoalsSection = () => {
 
   return (
     <GoalsListContext.Provider value={{ goalsList, addGoal, updateGoal }}>
-      <GoalSetter />
-      <Container verticalSpacing={16}>
-        {goalsList.map((goal) => (
-          <>
-            <GoalItem key={`goal-${goal.id}`} data={goal} />
-            <Container key={`goal-spacer-${goal.id}`} verticalSpacing={6} />
-          </>
-        ))}
+      <Container ratio={60} verticalSpacing={32}>
+        <GoalSetter />
+        <Container verticalSpacing={16}>
+          {goalsList.map((goal) => (
+            <>
+              <GoalItem key={`goal-${goal.id}`} data={goal} />
+              <Container key={`goal-spacer-${goal.id}`} verticalSpacing={6} />
+            </>
+          ))}
+        </Container>
       </Container>
     </GoalsListContext.Provider>
   );
