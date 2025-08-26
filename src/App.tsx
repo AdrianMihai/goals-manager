@@ -1,11 +1,11 @@
 import { ThemeProvider } from '@emotion/react';
 import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router';
 import { NotificationMessages } from './components/common-features/NotificationMessages';
 import { GoalsSection } from './components/goals-section/GoalsSection';
+import { LoginPage } from './pages/login/LoginPage';
 import { ThemeValues } from './theme/ThemeValues';
 import './types.d.ts';
-import { BrowserRouter, Route, Routes } from 'react-router';
-import { LoginPage } from './components/pages/login/LoginPage';
 
 export const App = () => {
   return (

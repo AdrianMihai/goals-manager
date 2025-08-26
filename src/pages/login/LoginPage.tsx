@@ -1,16 +1,21 @@
-import React from 'react';
-import { Button } from '../../buttons/Button';
-import { Container } from '../../layout/Container';
 import GithubIcon from '@mdi/svg/svg/github.svg';
-import { SVGIcon } from '../../../resources/SVGIcon';
-import { Spacer } from '../../layout/Spacer';
+import React from 'react';
+import { useSearchParams } from 'react-router';
+import { Button } from '../../components/buttons/Button';
+import { Col } from '../../components/layout/Col';
+import { Container } from '../../components/layout/Container';
+import { Row } from '../../components/layout/Row';
+import { Spacer } from '../../components/layout/Spacer';
+import { SVGIcon } from '../../resources/SVGIcon';
 import { StyledAppTitle } from './StyledComponents';
-import { Col } from '../../layout/Col';
-import { Row } from '../../layout/Row';
 
 const GITHUB_CLIENT_ID = 'Ov23liqq4V5xeipNegiF';
 
 export const LoginPage = () => {
+  const [queryParams] = useSearchParams();
+
+  console.log(queryParams);
+
   return (
     <Container ratio={80} verticalSpacing={80}>
       <Col crossAxisAlignment='center'>
