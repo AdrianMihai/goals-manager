@@ -1,6 +1,6 @@
+import { Dialog } from '@ark-ui/react';
 import styled from '@emotion/styled';
 import { Container } from '../../layout/Container';
-import { Dialog } from '@ark-ui/react';
 
 export const StyledDialogPositioner = styled(Dialog.Positioner)`
   position: fixed;
@@ -33,4 +33,8 @@ export const StyledDialogBackdrop = styled(Dialog.Backdrop)`
 
 export const StyledDialogFooter = styled(Container)`
   border-top: 1px solid ${({ theme }) => theme.colors.grey.light};
+`;
+
+export const StyledDialogHeader = styled(Container)`
+  border-bottom: 1px solid ${({ theme }) => theme.colors.grey.light};
 `;

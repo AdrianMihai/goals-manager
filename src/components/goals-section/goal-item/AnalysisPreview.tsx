@@ -1,21 +1,21 @@
+import Loading from '@mdi/svg/svg/loading.svg';
 import { marked } from 'marked';
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
+import { AppEvents, AppMediator } from '../../../events/AppMediator';
+import { EmptyRoadmap } from '../../../models/Goal';
+import { IconSize } from '../../../resources/SVGIcon';
+import { useStore } from '../../../state/UseStore';
+import { GoalsCollection, GoalsStore } from '../../../stores/GoalsStore';
+import { Conditional } from '../../Conditional';
 import { useTimedToggle } from '../../hooks/Common';
 import { Container } from '../../layout/Container';
 import { Row } from '../../layout/Row';
 import { Dialog } from '../../surfaces/dialog/Dialog';
 import { DialogBody } from '../../surfaces/dialog/DialogBody';
-import { StyledDialogFooter } from '../../surfaces/dialog/StyledComponents';
+import { StyledDialogFooter, StyledDialogHeader } from '../../surfaces/dialog/StyledComponents';
+import { LoadingBackdrop } from '../../surfaces/LoadingBackdrop';
 import { GoalItemContext } from './GoalItemContext';
 import { StyledAnalysisCloseButton, StyledAnalysisLoadingSpinner, StyledAnalysisTitle } from './StyledComponents';
-import { useStore } from '../../../state/UseStore';
-import { GoalsCollection, GoalsStore } from '../../../stores/GoalsStore';
-import { EmptyRoadmap } from '../../../models/Goal';
-import { AppEvents, AppMediator } from '../../../events/AppMediator';
-import { Conditional } from '../../Conditional';
-import { LoadingBackdrop } from '../../surfaces/LoadingBackdrop';
-import { IconSize } from '../../../resources/SVGIcon';
-import Loading from '@mdi/svg/svg/loading.svg';
 
 const roadmapDataComparer = (prev, next) => prev.roadmapAnalysis !== next.roadmapAnalysis;
 
@@ -61,9 +61,9 @@ export const AnalysisPreview = () => {
         </LoadingBackdrop>
       </Conditional>
       <Dialog open={isOpen} onOpenChange={onOpenChange}>
-        <Container verticalSpacing={10} horizontalSpacing={10}>
+        <StyledDialogHeader verticalSpacing={10} horizontalSpacing={10}>
           <StyledAnalysisTitle>{`Roadmap Analysis - ${goalData.text}`}</StyledAnalysisTitle>
-        </Container>
+        </StyledDialogHeader>
         <DialogBody>
           <Container horizontalSpacing={10} verticalSpacing={10} dangerouslySetInnerHTML={{ __html: content }} />
         </DialogBody>

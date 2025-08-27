@@ -1,59 +1,21 @@
-import { Draft, produce, setAutoFreeze } from 'immer';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Mediator } from '../events/Mediator';
-import { QueryContext, QueryFunction, QueryHandler } from './Query';
-
-setAutoFreeze(false);
-
-export interface DataObject<T> {
-  current: T;
-  previous: T;
-}
-
-type ObserverFn<T> = (data: DataObject<T>) => void;
-export type ComparerFn<T> = (prev: T, current: T) => boolean;
-export type SubscriberFn<T> = (observerFn: ObserverFn<T>, comparer?: ComparerFn<T>) => Subscription;
-export type QueryObserverFn = (eventName: string, handler: (queryResult: any) => any) => Subscription;
-
-type EventsMap = Record<string, string>;
-type HandlerArgs<T> = {
-  draft: Draft<T>;
-  events: EventsMap;
-  queryBus: { publishResult: (eventName: string, args: any) => any };
-};
-
-export interface Store<T> {
-  dataContainer: { value: T };
-  subscribe: SubscriberFn<T>;
-  events: EventsMap;
-  dispatchAction: (eventName: string, args: any) => void;
-  update: (handler: (handlerArgs: HandlerArgs<T>) => void) => void;
-  batchActions: (handler: any) => void;
-  queries: Record<string, QueryFunction>;
-  onPublishedResult: QueryObserverFn;
-}
-
-const triggerDataUpdate = (eventArgs, handler, { dataContainer, dataObservable, queryBus, events }) => {
-  const nextState = produce(dataContainer.value, (draft) => {
-    handler({ draft, events, queryBus }, eventArgs);
-  });
-
-  dataContainer.value = nextState;
-
-  if (dataContainer.isNotificationPaused) return;
-
-  dataObservable.next({ current: dataContainer.value, previous: dataContainer._previousValue });
-  dataContainer._previousValue = dataContainer.value;
-};
-
-export const queryHandlerMapper = <T>(getData: () => T, handler: QueryHandler<T>): QueryFunction => {
-  return (args: QueryContext | Record<string, any>) => handler(getData(), args);
-};
+import { QueryFunction, queryHandlerMapper } from './Query';
+import {
+  ComparerFn,
+  DataObject,
+  EventsImplementationsMap,
+  HandlerArgs,
+  HandlersMap,
+  ObserverFn,
+  Store,
+} from './StoreTypes';
+import { triggerDataUpdate } from './UpdateCommand';
 
 export const createStore = <T extends Record<string, any>>(
   initialValue: T,
-  actionsHandlers: Record<string, (handlerContext: HandlerArgs<T>, args: any) => void> = {},
-  queryHandlers: Record<string, QueryHandler<T>> = {}
+  actionsHandlers: HandlersMap<T> = {},
+  queryHandlers: EventsImplementationsMap<T> = {}
 ): Store<T> => {
   const dataContainer = { value: initialValue, _previousValue: initialValue, isNotificationPaused: false };
   const dataObservable = new BehaviorSubject<DataObject<T>>({ current: initialValue, previous: {} as T });

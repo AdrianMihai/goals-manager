@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ComparerFn, Store } from './StoreBuilder';
+import { ComparerFn, Store } from './StoreTypes';
 
 export const useStore = <T>(storeInstance: Store<T>, comparer?: ComparerFn<T>) => {
   const [value, setValue] = useState(storeInstance.dataContainer.value);
