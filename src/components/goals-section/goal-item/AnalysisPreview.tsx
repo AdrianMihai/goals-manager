@@ -1,9 +1,7 @@
-import Loading from '@mdi/svg/svg/loading.svg';
 import { marked } from 'marked';
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { AppEvents, AppMediator } from '../../../events/AppMediator';
 import { EmptyRoadmap } from '../../../models/Goal';
-import { IconSize } from '../../../resources/SVGIcon';
 import { useStore } from '../../../state/UseStore';
 import { GoalsCollection, GoalsStore } from '../../../stores/GoalsStore';
 import { Conditional } from '../../Conditional';
@@ -13,9 +11,9 @@ import { Row } from '../../layout/Row';
 import { Dialog } from '../../surfaces/dialog/Dialog';
 import { DialogBody } from '../../surfaces/dialog/DialogBody';
 import { StyledDialogFooter, StyledDialogHeader } from '../../surfaces/dialog/StyledComponents';
-import { LoadingBackdrop } from '../../surfaces/LoadingBackdrop';
 import { GoalItemContext } from './GoalItemContext';
-import { StyledAnalysisCloseButton, StyledAnalysisLoadingSpinner, StyledAnalysisTitle } from './StyledComponents';
+import { StyledAnalysisCloseButton, StyledAnalysisTitle } from './StyledComponents';
+import { LoadingIndicator } from '../../common-features/loading-indicator/LoadingIndicator';
 
 const roadmapDataComparer = (prev, next) => prev.roadmapAnalysis !== next.roadmapAnalysis;
 
@@ -54,11 +52,7 @@ export const AnalysisPreview = () => {
   return (
     <>
       <Conditional when={roadmapData.isAnalysisInProgress}>
-        <LoadingBackdrop>
-          <StyledAnalysisLoadingSpinner size={IconSize.VeryLarge}>
-            <Loading />
-          </StyledAnalysisLoadingSpinner>
-        </LoadingBackdrop>
+        <LoadingIndicator />
       </Conditional>
       <Dialog open={isOpen} onOpenChange={onOpenChange}>
         <StyledDialogHeader verticalSpacing={10} horizontalSpacing={10}>

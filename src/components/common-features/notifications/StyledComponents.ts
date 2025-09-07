@@ -1,6 +1,6 @@
 import { Toast } from '@ark-ui/react';
 import styled from '@emotion/styled';
-import { Button } from '../buttons/Button';
+import { Button } from '../../buttons/Button';
 
 export const StyledMessageContainer = styled(Toast.Root)`
   display: block;

@@ -1,17 +1,16 @@
-import axios from 'axios';
 import { AppEvents, AppMediator } from '../events/AppMediator';
 import { createAnalysis, Goal, SubGoal } from '../models/Goal';
 import { GoalsStore, SubGoalsStore } from '../stores/GoalsStore';
 import { GoalUpdateData } from './Types';
+import { ApiService } from './ApiService';
 
-const BASE_URL = 'http://localhost:3000/goals';
-const headers = { 'Content-Type': 'application/json', Accept: 'application/json' };
+const BASE_URL = '/goals';
 
 export const fetchAllGoals = async () => {
   let result = [];
 
   try {
-    result = (await axios.get(BASE_URL)).data;
+    result = (await ApiService.get(BASE_URL)).data;
   } catch (e) {
     console.log('error fetching goals', e.message);
 
@@ -40,9 +39,7 @@ export const fetchAllGoals = async () => {
 
 export const addNewGoal = async (goalData: Goal) => {
   try {
-    const response = await axios.post(BASE_URL, goalData, {
-      headers,
-    });
+    const response = await ApiService.post(BASE_URL, goalData);
 
     console.log(response.data);
   } catch (e) {
@@ -52,7 +49,7 @@ export const addNewGoal = async (goalData: Goal) => {
 
 export const updateGoal = async (goalData: Goal | GoalUpdateData) => {
   try {
-    const response = await axios.put(`${BASE_URL}/${goalData.id}`, goalData, { headers });
+    const response = await ApiService.put(`${BASE_URL}/${goalData.id}`, goalData);
 
     return response.data;
   } catch (e) {
@@ -62,7 +59,7 @@ export const updateGoal = async (goalData: Goal | GoalUpdateData) => {
 
 export const deleteGoal = async (goalId: string) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/${goalId}`);
+    const response = await ApiService.delete(`${BASE_URL}/${goalId}`);
 
     GoalsStore.dispatchAction(GoalsStore.events.deleteGoal, { goalId });
 
@@ -74,9 +71,7 @@ export const deleteGoal = async (goalId: string) => {
 
 export const addSubGoal = async (goalId: string, subGoalData: SubGoal) => {
   try {
-    const response = await axios.post(`${BASE_URL}/${goalId}/add-subGoal`, subGoalData, {
-      headers,
-    });
+    const response = await ApiService.post(`${BASE_URL}/${goalId}/add-subGoal`, subGoalData);
 
     return response.data;
   } catch (e) {

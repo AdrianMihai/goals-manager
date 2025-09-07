@@ -5,14 +5,16 @@ export enum IconSize {
   Medium = 16,
   Large = 20,
   VeryLarge = 28,
+  ExtremelyLarge = 48,
 }
 
-type IconProps = React.PropsWithChildren & {
-  className?: string;
-  size?: IconSize;
-};
+type IconProps = React.PropsWithChildren &
+  React.SVGProps<SVGAElement> & {
+    className?: string;
+    size?: IconSize;
+  };
 
-export const SVGIcon = ({ children, className, size = IconSize.Medium }: IconProps) => {
+export const SVGIcon = ({ children, className, size = IconSize.Medium, ...rest }: IconProps) => {
   const iconStyle = useMemo(
     () => ({
       width: `${size}px`,
@@ -29,5 +31,8 @@ export const SVGIcon = ({ children, className, size = IconSize.Medium }: IconPro
     return <span>Missing Icon</span>;
   }, [children]);
 
-  return useMemo(() => React.cloneElement(iconElement, { style: iconStyle, className }), [iconElement, iconStyle]);
+  return useMemo(
+    () => React.cloneElement(iconElement, { style: iconStyle, className, 'data-part': rest['data-part'] }),
+    [iconElement, iconStyle]
+  );
 };

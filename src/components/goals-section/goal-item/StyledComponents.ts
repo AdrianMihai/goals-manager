@@ -5,8 +5,6 @@ import { Container } from '../../layout/Container';
 import { Button } from '../../buttons/Button';
 import { StyledBasicTextFieldContainer } from '../../fields/StyledComponents';
 import { Card } from '../../surfaces/Card';
-import { css, keyframes } from '@emotion/react';
-import { SVGIcon } from '../../../resources/SVGIcon';
 
 export const StyledItemWrapper = styled(Container)`
   position: relative;
@@ -136,31 +134,6 @@ export const StyledAnalysisCloseButton = styled(Button)`
 
 export const StyledAnalysisTitle = styled.h2`
   margin: 0;
-`;
-
-const analysisLoadingAnimation = keyframes`
-  25% {
-    transform: rotate(90deg);
-  }
-
-  50% {
-    transform: rotate(180deg);
-  }
-
-  75% {
-    transform: rotate(270deg);
-  }
-  
-  100% {
-    transform: rotate(360deg);
-  }
-`;
-
-export const StyledAnalysisLoadingSpinner = styled(SVGIcon)`
-  animation: ${analysisLoadingAnimation} linear 1s infinite;
-  & > path {
-    fill: white;
-  }
 `;
 
 export const StyledGoalHeader = styled(Row)`

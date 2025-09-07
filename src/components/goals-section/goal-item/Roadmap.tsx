@@ -1,18 +1,9 @@
 import React, { useContext, useMemo } from 'react';
 import { EmptyRoadmap } from '../../../models/Goal';
-import { IconSize } from '../../../resources/SVGIcon';
 import { useStore } from '../../../state/UseStore';
 import { GoalsCollection, GoalsStore, SubGoalsStore } from '../../../stores/GoalsStore';
-import { Conditional } from '../../Conditional';
-import { LoadingBackdrop } from '../../surfaces/LoadingBackdrop';
 import { GoalItemContext } from './GoalItemContext';
-import {
-  StyledAnalysisLoadingSpinner,
-  StyledRoadmapItemLink,
-  StyledRoadmapWrapper,
-  StyledSubGoalCard,
-  StyledSubGoalTitle,
-} from './StyledComponents';
+import { StyledRoadmapItemLink, StyledRoadmapWrapper, StyledSubGoalCard, StyledSubGoalTitle } from './StyledComponents';
 import { SubGoalsActions } from './SubGoalsActions';
 
 const comparer = (prev, next) => prev.subGoals !== next.subGoals;

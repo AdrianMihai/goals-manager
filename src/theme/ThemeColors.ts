@@ -29,5 +29,6 @@ export const ThemeColors = {
   },
   blue: {
     light: '#d6f6ff',
+    main: '#0272F2',
   },
 };

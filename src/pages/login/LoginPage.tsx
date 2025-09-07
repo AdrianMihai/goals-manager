@@ -1,45 +1,42 @@
 import GithubIcon from '@mdi/svg/svg/github.svg';
 import React from 'react';
-import { Navigate, useSearchParams } from 'react-router';
-import { Button } from '../../components/buttons/Button';
-import { Conditional } from '../../components/Conditional';
 import { Col } from '../../components/layout/Col';
 import { Container } from '../../components/layout/Container';
 import { Row } from '../../components/layout/Row';
 import { Spacer } from '../../components/layout/Spacer';
-import { SVGIcon } from '../../resources/SVGIcon';
-import { isNullOrUndefined } from '../../utils/ObjectUtils';
-import { StyledAppTitle } from './StyledComponents';
+import { IconSize, SVGIcon } from '../../resources/SVGIcon';
+import { StyledAppTitle, StyledGithubLoginTrigger } from './StyledComponents';
+import { LoadingIndicator } from '../../components/common-features/loading-indicator/LoadingIndicator';
+import { useAuthenticationChecks } from './UseAuthenticationChecks';
+import { Conditional } from '../../components/Conditional';
 
 const GITHUB_CLIENT_ID = 'Ov23liqq4V5xeipNegiF';
 
 export const LoginPage = () => {
-  const [queryParams] = useSearchParams();
-
-  console.log(queryParams);
+  const { isLoading } = useAuthenticationChecks();
 
   return (
     <>
-      <Conditional when={!isNullOrUndefined(queryParams.get('code'))}>
-        <Navigate to='/goals' />
-      </Conditional>
       <Container ratio={80} verticalSpacing={80}>
+        <Conditional when={isLoading}>
+          <LoadingIndicator spinnerSize={IconSize.ExtremelyLarge} />
+        </Conditional>
         <Col crossAxisAlignment='center'>
           <StyledAppTitle>Goals Road Maps</StyledAppTitle>
           <Row mainAxisAlignment='center'>
-            <Button
+            <StyledGithubLoginTrigger
               onClick={() =>
                 window.location.assign(
                   `https://github.com/login/oauth/authorize?scope=user:email&client_id=${GITHUB_CLIENT_ID}`
                 )
               }
             >
-              <SVGIcon>
+              <SVGIcon size={IconSize.Large}>
                 <GithubIcon />
               </SVGIcon>
               <Spacer size={8} />
               Login with github
-            </Button>
+            </StyledGithubLoginTrigger>
           </Row>
         </Col>
       </Container>
