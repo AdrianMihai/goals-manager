@@ -39,9 +39,7 @@ export const fetchAllGoals = async () => {
 
 export const addNewGoal = async (goalData: Goal) => {
   try {
-    const response = await ApiService.post(BASE_URL, goalData);
-
-    console.log(response.data);
+    await ApiService.post(BASE_URL, goalData);
   } catch (e) {
     console.log(e);
   }

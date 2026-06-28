@@ -18,7 +18,7 @@ export const analyzeRoadmap = async (data: RoadmapData) => {
 
     const response = await axios.post(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${localStorage.getItem(
-        'GeminiKey'
+        'GeminiKey',
       )}`,
       {
         contents: [
@@ -30,12 +30,12 @@ export const analyzeRoadmap = async (data: RoadmapData) => {
             ],
           },
         ],
-      }
+      },
     );
 
     result.roadmapAnalysis = extractBasicTextResponse(response.data);
-  } catch (e) {
-    console.log(e.message);
+  } catch (e: unknown) {
+    console.log((e as Error).message);
 
     return null;
   }

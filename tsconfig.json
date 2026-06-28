@@ -1,9 +1,10 @@
 {
   "include": ["src/**/*"],
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "skipLibCheck": true,
     "sourceMap": true,
+    "moduleResolution": "bundler",
     "jsx": "react",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true

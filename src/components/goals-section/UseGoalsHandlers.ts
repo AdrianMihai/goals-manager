@@ -42,7 +42,7 @@ export const useGoalsHandlers = () => {
       SubGoalsStore.events.subGoalAdded,
       ({ subGoal, goalId }) => {
         addSubGoal(goalId, subGoal);
-      }
+      },
     );
 
     return () => {
@@ -74,19 +74,17 @@ export const useGoalsHandlers = () => {
       });
     };
 
-    const onDisplayAction = () => {
-      console.log('displayed');
-    };
+    const onDisplayAction = () => {};
 
     const analysisTriggerObserver = AppMediator.subscribe(AppEvents.analyzeRoadmap, onAnaylsisTriggered);
     const anaylsisDisplayObserver = AppMediator.subscribe(
       AppEvents.notificationActionTriggered,
-      ({ messageId }) => messageId === NOTIFICATION_ID && onDisplayAction()
+      ({ messageId }) => messageId === NOTIFICATION_ID && onDisplayAction(),
     );
 
     return () => {
-      analysisTriggerObserver.unsubscribe();
-      anaylsisDisplayObserver.unsubscribe();
+      analysisTriggerObserver?.unsubscribe();
+      anaylsisDisplayObserver?.unsubscribe();
     };
   }, []);
 };
